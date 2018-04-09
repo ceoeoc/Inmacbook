@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">practice</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="feat">업적</string>
+    <string name="friend_lv0">아는 사람</string>
+    <string name="friend_lv1">익숙한 사람</string>
+    <string name="friend_lv2">친구의 친구</string>
+    <string name="friend_lv3">친숙한 사람</string>
+    <string name="friend_lv4">친구</string>
+    <string name="friend_lv5">친한 친구</string>
+    <string name="friend_lv6">절친한 친구</string>
+    <string name="friend_lv7">소울 메이트</string>
+
+    <string name="person_lv0">모르는 사람</string>
+    <string name="person_work">업무상 아는사람</string>
+
+    <string name="family_mom">엄마</string>
+    <string name="family_dad">아빠</string>
+    <string name="family_bro">형제</string>
+    <string name="family_sis">자매</string>
+    <string name="family_fam">친척</string>
+
+</resources>
