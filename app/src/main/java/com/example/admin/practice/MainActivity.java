@@ -1,9 +1,11 @@
 package com.example.admin.practice;
 
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -12,15 +14,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.Random;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final String[] items = {"WHITE","RED","GREEN","BLUE","BLACK"};
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
+
     }
 
 
@@ -80,17 +87,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id) {
+            case R.id.action_settings:
+                Toast.makeText(this,"액션버튼 setting",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_profile:
+                Toast.makeText(this,"액션버튼 profile",Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -111,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     Tab3Fragment tab3 = new Tab3Fragment();
                     return tab3;
+                case 3:
+                    Tab4Fragment tab4 = new Tab4Fragment();
+                    return tab4;
                 default:
                     return null;
             }
@@ -119,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
 
         @Override
@@ -131,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
                     return "TAB2";
                 case 2:
                     return "TAB3";
+                case 3:
+                    return "TAB4";
             }
             return null;
         }
