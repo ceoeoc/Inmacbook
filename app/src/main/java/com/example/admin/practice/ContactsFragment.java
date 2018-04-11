@@ -30,4 +30,8 @@ public class ContactsFragment extends Fragment {
         mListView.setAdapter(mAdapter);
         return rootView;
     }
+
+    private void dataSetting(){
+
+    }
 }
