@@ -5,12 +5,14 @@ import android.graphics.drawable.Drawable;
 public class ContactsItem {
 
     private Drawable icon;
+    private int _Id;
     private String name;
-    private String contents;
+    private String phone;
     private int point;
     private int level;
     private String feat;
     private String group;
+
     public Drawable getIcon() {
         return icon;
     }
@@ -19,6 +21,13 @@ public class ContactsItem {
         this.icon = icon;
     }
 
+    public int get_Id(){
+        return _Id;
+    }
+
+    public void set_Id(int _Id){
+        this._Id = _Id;
+    }
     public String getName() {
         return name;
     }
@@ -27,12 +36,12 @@ public class ContactsItem {
         this.name = name;
     }
 
-    public String getContents() {
-        return contents;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
+    public void setPhone(String contents) {
+        this.phone = contents;
     }
 
     public int getPoint(){
