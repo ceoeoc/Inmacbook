@@ -1,4 +1,4 @@
-package com.example.admin.practice;
+package com.example.admin.practice.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -9,6 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.admin.practice.ContactsItem;
+import com.example.admin.practice.R;
 
 import java.util.ArrayList;
 

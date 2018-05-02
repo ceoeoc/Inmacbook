@@ -1,4 +1,4 @@
-package com.example.admin.practice;
+package com.example.admin.practice.fragments;
 
 import android.os.Bundle;
 import android.content.SharedPreferences;
@@ -9,6 +9,8 @@ import android.preference.PreferenceScreen;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.admin.practice.R;
 
 public class SettingPreferenceFragment extends PreferenceFragment {
 

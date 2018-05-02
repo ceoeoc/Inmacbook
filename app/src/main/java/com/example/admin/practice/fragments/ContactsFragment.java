@@ -1,4 +1,4 @@
-package com.example.admin.practice;
+package com.example.admin.practice.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.example.admin.practice.adapters.ContactsAdapter;
+import com.example.admin.practice.R;
 
 import java.util.Random;
 
