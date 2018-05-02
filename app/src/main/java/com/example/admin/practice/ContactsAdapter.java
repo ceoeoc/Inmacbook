@@ -50,19 +50,19 @@ public class ContactsAdapter extends BaseAdapter {
 
         iv_img.setImageDrawable(myItem.getIcon());
         tv_name.setText(myItem.getName());
-        tv_contents.setText(myItem.getContents());
+        tv_contents.setText(myItem.getPhone());
         pgb.setProgress(myItem.getPoint());
 
         return convertView;
     }
 
-    public void addItem(Drawable img, String name, String contents, int point) {
+    public void addItem(Drawable img, String name, String phone, int point) {
 
         ContactsItem mItem = new ContactsItem();
 
         mItem.setIcon(img);
         mItem.setName(name);
-        mItem.setContents(contents);
+        mItem.setPhone(phone);
         mItem.setPoint(point);
 
         mItems.add(mItem);

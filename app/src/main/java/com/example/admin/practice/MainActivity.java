@@ -1,7 +1,6 @@
 package com.example.admin.practice;
 
 import android.graphics.Color;
-import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -95,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"액션버튼 setting",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_profile:
-                ProfileFragment profile = new ProfileFragment();
                 Toast.makeText(this,"액션버튼 profile",Toast.LENGTH_SHORT).show();
                 return true;
             default:
