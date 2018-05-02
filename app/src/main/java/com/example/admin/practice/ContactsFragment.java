@@ -1,6 +1,8 @@
 package com.example.admin.practice;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -21,17 +23,32 @@ public class ContactsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.contacts_fragment, container, false);
 
         mListView = (ListView) rootView.findViewById(R.id.listview);
-        mAdapter = new ContactsAdapter();
-        Random r = new Random();
-        for(int i = 0 ; i < 10 ; i++){
-            mAdapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.icon), "name_" + i, "contents_" + i,r.nextInt(100));
-        }
-        mAdapter.notifyDataSetChanged();
-        mListView.setAdapter(mAdapter);
+
+        dataSetting();
         return rootView;
     }
 
     private void dataSetting(){
+        mAdapter = new ContactsAdapter();
+        Random r = new Random();
+        String[] arrProjection = {
+                ContactsContract.Contacts._ID,
+                ContactsContract.Contacts.DISPLAY_NAME
+        };
 
+        Cursor clsCursor = getActivity().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
+                arrProjection,
+                ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",
+                null, null);
+
+        while(clsCursor.moveToNext()){
+
+
+
+            mAdapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(),R.drawable.icon), clsCursor.getString(0),clsCursor.getString(1),r.nextInt(100));
+        }
+        clsCursor.close();
+        mAdapter.notifyDataSetChanged();
+        mListView.setAdapter(mAdapter);
     }
 }
