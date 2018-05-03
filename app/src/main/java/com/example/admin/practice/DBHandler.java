@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.SQLException;
 
+import com.wafflecopter.multicontactpicker.ContactResult;
+import com.wafflecopter.multicontactpicker.RxContacts.Contact;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +29,12 @@ public class DBHandler {
 
     public long insert(ContactsItem con) {
         ContentValues cv = new ContentValues();
-        cv.put(DBHelper.ColId, con.get_Id());
-        cv.put(DBHelper.ColPhone, con.getPhone());
+        cv.put(DBHelper.ColId, con.getCr().getContactID());
+        cv.put(DBHelper.ColPhone, con.getCr().getPhoneNumbers().get(0));
         cv.put(DBHelper.ColPoint, con.getPoint());
+        cv.put(DBHelper.ColLevel, con.getLevel());
         cv.put(DBHelper.ColFeat, con.getFeat());
+        cv.put(DBHelper.ColGroup, con.getGroup());
 
         long i = db.insert(DBHelper.TBName, null, cv);
         return i;
@@ -37,11 +42,14 @@ public class DBHandler {
 
     public void update(ContactsItem con){
         ContentValues cv = new ContentValues();
-        cv.put(DBHelper.ColId, con.get_Id());
-        cv.put(DBHelper.ColPhone, con.getPhone());
+        cv.put(DBHelper.ColId, con.getCr().getContactID());
+        cv.put(DBHelper.ColPhone, con.getCr().getPhoneNumbers().get(0));
         cv.put(DBHelper.ColPoint, con.getPoint());
+        cv.put(DBHelper.ColLevel, con.getLevel());
         cv.put(DBHelper.ColFeat, con.getFeat());
-        db.update(DBHelper.TBName, cv, DBHelper.ColId + "=" + con.get_Id(),null);
+        cv.put(DBHelper.ColGroup, con.getGroup());
+
+        db.update(DBHelper.TBName, cv, DBHelper.ColId + "=" + con.getCr().getContactID(),null);
     }
 
     public void delete(long i) {
@@ -66,8 +74,11 @@ public class DBHandler {
 
     public ContactsItem cursorToContact(Cursor curs){
         ContactsItem c = new ContactsItem();
-        c.set_Id(curs.getInt(0));
-        c.setPhone(curs.getString(1));
+        ContactResult cr = new ContactResult();
+
+        cr.setContactID(curs.getString(0));
+
+        c.setCr();
         c.setPoint(curs.getInt(2));
         c.setFeat(curs.getString(3));
         return c;

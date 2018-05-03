@@ -8,17 +8,21 @@ public class DBHelper extends SQLiteOpenHelper{
 
     public static String DBName = "Contacts";
     public static int DBVersion = 1;
-    public static String TBName = "Contact";
+    public static String TBName = "ContactTable";
     public static String ColId = "_id";
     public static String ColPhone = "phone";
     public static String ColPoint = "point";
+    public static String ColLevel = "level";
     public static String ColFeat = "feat";
+    public static String ColGroup = "group";
 
     public static String create =
-            "CREATE TABLE " + TBName + "(" + ColId + "integer primary key autoincrement, "
+            "CREATE TABLE " + TBName + "(" + ColId + "text not null, "
             + ColPhone + " text not null, "
             + ColPoint + " integer not null, "
-            + ColFeat + "text not null);";
+            + ColLevel + " integer not null, "
+            + ColFeat + "text not null, "
+            + ColGroup + "text not null);";
 
     public DBHelper(Context context){
         super(context, DBName, null, DBVersion);

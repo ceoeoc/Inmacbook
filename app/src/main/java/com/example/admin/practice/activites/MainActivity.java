@@ -1,8 +1,13 @@
 package com.example.admin.practice.activites;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -11,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,9 +29,15 @@ import com.example.admin.practice.R;
 import com.example.admin.practice.fragments.Tab2Fragment;
 import com.example.admin.practice.fragments.Tab3Fragment;
 import com.example.admin.practice.fragments.Tab4Fragment;
+import com.wafflecopter.multicontactpicker.ContactResult;
+import com.wafflecopter.multicontactpicker.MultiContactPicker;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int CONTACT_PICKER_REQUEST = 991;
+    FloatingActionButton fab;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -46,10 +58,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final String[] items = {"WHITE","RED","GREEN","BLUE","BLACK"};
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MultiContactPicker.Builder(MainActivity.this) //Activity/fragment context
+                        .theme(R.style.MyCustomPickerTheme) //Optional - default: MultiContactPicker.Azure
+                        .hideScrollbar(false) //Optional - default: false
+                        .showTrack(true) //Optional - default: true
+                        .searchIconColor(Color.WHITE) //Option - default: White
+                        .setChoiceMode(MultiContactPicker.CHOICE_MODE_MULTIPLE) //Optional - default: CHOICE_MODE_MULTIPLE
+                        .handleColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary)) //Optional - default: Azure Blue
+                        .bubbleColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary)) //Optional - default: Azure Blue
+                        .bubbleTextColor(Color.WHITE) //Optional - default: White
+                        .showPickerForResult(CONTACT_PICKER_REQUEST);
+            }
+        });
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -63,19 +91,20 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CONTACT_PICKER_REQUEST){
+            if(resultCode == RESULT_OK) {
+                List<ContactResult> results = MultiContactPicker.obtainResult(data);
+                Log.d("MyTag", results.get(0).getDisplayName());
+            } else if(resultCode == RESULT_CANCELED){
+                System.out.println("User closed the picker without selecting items.");
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-            public CharSequence getPageTitle(int position){
+        public CharSequence getPageTitle(int position){
             switch(position){
                 case 0:
                     return "CONTACTS";
