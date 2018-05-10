@@ -1,17 +1,14 @@
 package com.example.admin.practice.activites;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -21,21 +18,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.example.admin.practice.ContactsItem;
+import com.example.admin.practice.DBHandler;
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
-import com.example.admin.practice.fragments.Tab2Fragment;
-import com.example.admin.practice.fragments.Tab3Fragment;
-import com.example.admin.practice.fragments.Tab4Fragment;
+import com.example.admin.practice.fragments.QuestFragment;
+import com.example.admin.practice.fragments.StaticsFragment;
+import com.example.admin.practice.fragments.RankingFragment;
 import com.wafflecopter.multicontactpicker.ContactResult;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    DBHandler dh = null;
+    Fragment frg = null;
     private static final int CONTACT_PICKER_REQUEST = 991;
     FloatingActionButton fab;
     /**
@@ -58,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dh = new DBHandler(this);
+        dh.open();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Create the adapter that will return a fragment for each of the three
+        // Create the adapter that will return a fragment for each of the foursss
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -96,15 +98,49 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("fab","onActivityResult" );
         if(requestCode == CONTACT_PICKER_REQUEST){
             if(resultCode == RESULT_OK) {
+                Log.i("fab", "inContact_picker+request");
                 List<ContactResult> results = MultiContactPicker.obtainResult(data);
-                Log.d("MyTag", results.get(0).getDisplayName());
+                ContactsItem ci = new ContactsItem();
+                for (int i = 0; i < results.size(); i++) {
+                    ci.set_id(results.get(i).getContactID());
+                    if(!dh.isExist(ci.get_id())){
+                        ci.setName(results.get(i).getDisplayName());
+                        ci.setPhone(results.get(i).getPhoneNumbers().get(0));
+                        //ci.setPhoto(getByteArrayFromUri(results.get(i).getPhoto()));
+                        ci.setFeat("unknown");
+                        ci.setPoint(0);
+                        ci.setLevel(0);
+                        ci.setGroup("unknown");
+                        dh.insert(ci);
+                    }else{
+                        ci = dh.getData(ci.get_id());
+                        ci.setName(results.get(i).getDisplayName());
+                        ci.setPhone(results.get(i).getPhoneNumbers().get(0));
+                        //ci.setPhoto(getByteArrayFromUri(results.get(i).getPhoto()));
+                        dh.update(ci);
+                    }
+                }
             } else if(resultCode == RESULT_CANCELED){
                 System.out.println("User closed the picker without selecting items.");
             }
         }
     }
+    /*public byte[] getByteArrayFromUri(Uri uri){
+        try {
+            Bitmap bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.PNG,100,stream);
+            byte[] data = stream.toByteArray();
+
+            return data;
+        }catch(Exception e){
+            Log.e("Insert DO Photo",e.toString());
+        }
+        return null;
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -142,13 +178,13 @@ public class MainActivity extends AppCompatActivity {
                     ContactsFragment tab1 = new ContactsFragment();
                     return tab1;
                 case 1:
-                    Tab2Fragment tab2 = new Tab2Fragment();
+                    QuestFragment tab2 = new QuestFragment();
                     return tab2;
                 case 2:
-                    Tab3Fragment tab3 = new Tab3Fragment();
+                    StaticsFragment tab3 = new StaticsFragment();
                     return tab3;
                 case 3:
-                    Tab4Fragment tab4 = new Tab4Fragment();
+                    RankingFragment tab4 = new RankingFragment();
                     return tab4;
                 default:
                     return null;
@@ -157,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 4 total pages.
             return 4;
         }
 
@@ -167,11 +203,11 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return "CONTACTS";
                 case 1:
-                    return "TAB2";
+                    return "QUEST";
                 case 2:
-                    return "TAB3";
+                    return "STATICS";
                 case 3:
-                    return "TAB4";
+                    return "RANKING";
             }
             return null;
         }
