@@ -1,7 +1,8 @@
 package com.example.admin.practice.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,30 +45,27 @@ public class ContactsAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.contacts_list, parent, false);
         }
 
-        ImageView iv_img = (ImageView) convertView.findViewById(R.id.iv_img) ;
-        TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name) ;
-        TextView tv_contents = (TextView) convertView.findViewById(R.id.tv_contents) ;
+        //ImageView iv_image = (ImageView) convertView.findViewById(R.id.iv_img);
+        TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+        //TextView tv_contents = (TextView) convertView.findViewById(R.id.tv_contents) ;
         ProgressBar pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
 
         ContactsItem myItem = getItem(position);
 
-        iv_img.setImageDrawable(myItem.getIcon());
+        //iv_image.setImageBitmap(getAppIcon(myItem.getPhoto()));
         tv_name.setText(myItem.getName());
-        tv_contents.setText(myItem.getPhone());
+        //v_contents.setText(myItem.getPhone());
         pgb.setProgress(myItem.getPoint());
 
         return convertView;
     }
 
-    public void addItem(Drawable img, String name, String phone, int point) {
+    public Bitmap getAppIcon(byte[] b){
+        Bitmap bm = BitmapFactory.decodeByteArray(b,0,b.length);
+        return bm;
+    }
 
-        ContactsItem mItem = new ContactsItem();
-
-        mItem.setIcon(img);
-        mItem.setName(name);
-        mItem.setPhone(phone);
-        mItem.setPoint(point);
-
+    public void addItem(ContactsItem mItem) {
         mItems.add(mItem);
     }
 }

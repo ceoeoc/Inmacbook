@@ -1,10 +1,13 @@
 package com.example.admin.practice;
 
+import android.Manifest;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.CallLog;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +30,7 @@ public class LogsManager {
     public LogsManager(Context context) {
         this.context = context;
     }
-
+    @RequiresPermission(Manifest.permission.READ_CALL_LOG)
     public int getOutgoingDuration() {
         int sum = 0;
 
@@ -45,7 +48,7 @@ public class LogsManager {
 
         return sum;
     }
-
+    @RequiresPermission(Manifest.permission.READ_CALL_LOG)
     public int getIncomingDuration() {
         int sum = 0;
 
@@ -63,7 +66,7 @@ public class LogsManager {
 
         return sum;
     }
-
+    @RequiresPermission(Manifest.permission.READ_CALL_LOG)
     public int getTotalDuration() {
         int sum = 0;
 
@@ -80,7 +83,7 @@ public class LogsManager {
 
         return sum;
     }
-
+    @RequiresPermission(Manifest.permission.READ_CALL_LOG)
     public String getCoolDuration(int type) {
         float sum;
 
@@ -129,8 +132,8 @@ public class LogsManager {
 
         return duration;
     }
-
-    public List<LogObject> getLogs(int callType,String phone) {
+    @RequiresPermission(Manifest.permission.READ_CALL_LOG)
+    public List<LogObject> getLogs(int callType,String phone, long timelimit) {
         List<LogObject> logs = new ArrayList<>();
 
         String selection;
@@ -146,9 +149,16 @@ public class LogsManager {
                 selection = CallLog.Calls.TYPE + " = " + CallLog.Calls.MISSED_TYPE;
                 break;
             case ALL_CALLS:
-                selection = null;
+                selection = CallLog.Calls.NUMBER;
             default:
-                selection = null;
+                selection = CallLog.Calls.NUMBER;
+        }
+
+        if(!phone.isEmpty()){
+            selection = selection +  " and " + CallLog.Calls.NUMBER + " = " + "'" +phone + "'";
+        }
+        if(timelimit != 0){
+            selection = selection + " and " + CallLog.Calls.DATE + " >= " + timelimit;
         }
 
         Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, null, null);
@@ -160,15 +170,10 @@ public class LogsManager {
         while (cursor.moveToNext()) {
             LogObject log = new LogObject(context);
 
-
             log.setNumber(cursor.getString(number));
             log.setType(cursor.getInt(type));
             log.setDuration(cursor.getInt(duration));
             log.setDate(cursor.getLong(date));
-            if(!log.getNumber().equals(phone)) {
-                Log.v(log.getNumber(),phone);
-                continue;
-            }
             Log.v("add",phone);
             logs.add(log);
         }

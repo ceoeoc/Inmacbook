@@ -1,4 +1,4 @@
-package com.wickerlabs.logmanager;
+package com.example.admin.practice;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-import com.wickerlabs.logmanager.interfaces.CallLogObject;
 
 import java.text.DecimalFormat;
 

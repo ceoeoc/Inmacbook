@@ -25,5 +25,9 @@
     <string name="family_bro">형제</string>
     <string name="family_sis">자매</string>
     <string name="family_fam">친척</string>
+    <string name="dialog_title">Modify Info</string>
+    <string name="dialog_positive_button">Save</string>
+    <string name="info_name">name</string>
+    <string name="edit_name">input new name</string>
 
 </resources>

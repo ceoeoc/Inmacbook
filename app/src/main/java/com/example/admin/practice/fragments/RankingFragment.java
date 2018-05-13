@@ -12,7 +12,7 @@ import com.example.admin.practice.R;
  * Created by qkrrj on 2018-04-11.
  */
 
-public class Tab4Fragment extends Fragment {
+public class RankingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -7,15 +7,7 @@
  * is strictly forbidden unless prior permission is obtained from WickerLabs. inc                 *
  * *
  **************************************************************************************************/
-package com.wickerlabs.logmanager.interfaces;
-
-/**
- * Created by: WickerLabs.Inc
- * Project title: CallLogs
- * Time: 10:06 AM
- * Date: 1/27/2017
- * Website: http://www.wickerlabs.com
- */
+package com.example.admin.practice;
 
 public interface CallLogObject {
 
