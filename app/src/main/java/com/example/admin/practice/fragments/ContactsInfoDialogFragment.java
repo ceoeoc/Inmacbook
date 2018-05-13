@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,9 +36,8 @@ public class ContactsInfoDialogFragment extends DialogFragment {
 
     private List<LogObject> callLogs;
     private WebView mcl;
-    private Button oB,cB;
-    private EditText name;
-    private TextView phone;
+    private Button oB,cB,rb,sb;
+    private TextView name, phone;
     private Spinner gsp;
     private String mcid;
     private String selectedGroup;
@@ -67,20 +67,9 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         dh.open();
         mitem = dh.getData(mcid);
 
-        name = (EditText) rootView.findViewById(R.id.name);
+        name = (TextView) rootView.findViewById(R.id.name);
         phone = (TextView) rootView.findViewById(R.id.phone);
         name.setText(mitem.getName());
-        name.setClickable(false);
-        name.setFocusable(false);
-        name.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                name.setFocusableInTouchMode(true);
-                name.setClickable(true);
-                name.setFocusable(true);
-                return false;
-            }
-        });
         phone.setText(mitem.getPhone());
 
         gsp = rootView.findViewById(R.id.gspinner);
@@ -102,7 +91,20 @@ public class ContactsInfoDialogFragment extends DialogFragment {
 
         oB = (Button) rootView.findViewById(R.id.confrim);
         cB = (Button) rootView.findViewById(R.id.cancel);
-
+        rb = (Button) rootView.findViewById(R.id.receivedcall);
+        sb = (Button) rootView.findViewById(R.id.sentcall);
+        LinearLayout in = (LinearLayout)rootView.findViewById(R.id.ratebar);
+        float a,b;
+        a = (float)logsManager.getLogCount(LogsManager.INCOMING_CALLS,mitem.getPhone(),date);
+        b = (float)logsManager.getLogCount(LogsManager.OUTGOING_CALLS,mitem.getPhone(),date);
+        in.setWeightSum(a+b);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT);
+        p.weight = a;
+        rb.setText(rb.getText() + "" + p.weight);
+        rb.setLayoutParams(p);
+        p.weight = b;
+        sb.setText(sb.getText() + "" +  p.weight);
+        sb.setLayoutParams(p);
         oB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

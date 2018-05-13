@@ -185,9 +185,38 @@ public class LogsManager {
         }
 
         cursor.close();
-
-
         return logs;
+    }
+
+    @RequiresPermission(Manifest.permission.READ_CALL_LOG)
+    public int getLogCount(int callType,String phone, long timelimit) {
+        String selection;
+        int ret = 0;
+        switch (callType) {
+            case INCOMING_CALLS:
+                selection = CallLog.Calls.TYPE + " = " + CallLog.Calls.INCOMING_TYPE;
+                break;
+            case OUTGOING_CALLS:
+                selection = CallLog.Calls.TYPE + " = " + CallLog.Calls.OUTGOING_TYPE;
+                break;
+            case MISSED_CALLS:
+                selection = CallLog.Calls.TYPE + " = " + CallLog.Calls.MISSED_TYPE;
+                break;
+            case ALL_CALLS:
+                selection = CallLog.Calls.NUMBER;
+            default:
+                selection = CallLog.Calls.NUMBER;
+        }
+        if(!phone.isEmpty()){
+            selection = selection +  " and " + CallLog.Calls.NUMBER + " = " + "'" +phone + "'";
+        }
+        if(timelimit != 0){
+            selection = selection + " and " + CallLog.Calls.DATE + " >= " + timelimit;
+        }
+        Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, null, null);
+        ret = cursor.getCount();
+        cursor.close();
+        return ret;
     }
     //그룹별 통화기록 횟수를 측정함
     @RequiresPermission(Manifest.permission.READ_CALL_LOG)
