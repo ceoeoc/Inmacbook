@@ -11,7 +11,10 @@ import android.widget.Button;
 import com.example.admin.practice.R;
 
 public class QuestFragment extends Fragment{
+<<<<<<< HEAD:app/src/main/java/com/example/admin/practice/fragments/QuestFragment.java
     Button button;
+=======
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36:app/src/main/java/com/example/admin/practice/fragments/QuestFragment.java
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -1,8 +1,12 @@
 package com.example.admin.practice.fragments;
 
+<<<<<<< HEAD
 import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.RequiresPermission;
+=======
+import android.os.Bundle;
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
 import android.support.v4.app.DialogFragment;
 import android.telecom.Call;
 import android.view.LayoutInflater;
@@ -63,7 +67,11 @@ public class ContactsInfoDialogFragment extends DialogFragment {
             mcid = getArguments().getString(Key);
         }
     }
+<<<<<<< HEAD
     @RequiresPermission(Manifest.permission.READ_CALL_LOG)
+=======
+
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -96,12 +104,16 @@ public class ContactsInfoDialogFragment extends DialogFragment {
 
         ListView mlv = (ListView) rootView.findViewById(R.id.cllv);
         LogsManager logsManager = new LogsManager(getActivity());
+<<<<<<< HEAD
         try {
             callLogs = logsManager.getLogs(LogsManager.ALL_CALLS, mitem.getPhone(), date);
         }catch (SecurityException e){
             e.printStackTrace();
         }
         callLogs = new ArrayList<>();
+=======
+        callLogs = logsManager.getLogs(LogsManager.ALL_CALLS,mitem.getPhone(),date);
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
         LogsAdapter logsAdapter = new LogsAdapter(getActivity(),R.layout.log_layout,callLogs);
         mlv.setAdapter(logsAdapter);
 

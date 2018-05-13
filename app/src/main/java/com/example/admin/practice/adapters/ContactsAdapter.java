@@ -46,7 +46,11 @@ public class ContactsAdapter extends BaseAdapter {
         }
 
         //ImageView iv_image = (ImageView) convertView.findViewById(R.id.iv_img);
+<<<<<<< HEAD
         TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+=======
+        TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name) ;
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
         //TextView tv_contents = (TextView) convertView.findViewById(R.id.tv_contents) ;
         ProgressBar pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
 

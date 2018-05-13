@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+<<<<<<< HEAD
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Location;
@@ -18,6 +19,11 @@ import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+=======
+import android.graphics.Color;
+import android.support.design.widget.TabLayout;
+import android.support.design.widget.FloatingActionButton;
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +43,10 @@ import android.widget.Toast;
 
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DBHandler;
+<<<<<<< HEAD
 import com.example.admin.practice.DB_Manager;
+=======
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
 import com.example.admin.practice.fragments.QuestFragment;
@@ -82,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
         if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -90,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+=======
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
         dh = new DBHandler(this);
         dh.open();
 

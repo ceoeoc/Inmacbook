@@ -1,10 +1,16 @@
 package com.example.admin.practice;
 
+<<<<<<< HEAD
 import android.Manifest;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.CallLog;
 import android.support.annotation.RequiresPermission;
+=======
+import android.content.Context;
+import android.database.Cursor;
+import android.provider.CallLog;
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
 import android.util.Log;
 
 import java.sql.Date;
@@ -30,7 +36,11 @@ public class LogsManager {
     public LogsManager(Context context) {
         this.context = context;
     }
+<<<<<<< HEAD
     @RequiresPermission(Manifest.permission.READ_CALL_LOG)
+=======
+
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
     public int getOutgoingDuration() {
         int sum = 0;
 
@@ -48,7 +58,11 @@ public class LogsManager {
 
         return sum;
     }
+<<<<<<< HEAD
     @RequiresPermission(Manifest.permission.READ_CALL_LOG)
+=======
+
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
     public int getIncomingDuration() {
         int sum = 0;
 
@@ -66,7 +80,11 @@ public class LogsManager {
 
         return sum;
     }
+<<<<<<< HEAD
     @RequiresPermission(Manifest.permission.READ_CALL_LOG)
+=======
+
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
     public int getTotalDuration() {
         int sum = 0;
 
@@ -83,7 +101,11 @@ public class LogsManager {
 
         return sum;
     }
+<<<<<<< HEAD
     @RequiresPermission(Manifest.permission.READ_CALL_LOG)
+=======
+
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
     public String getCoolDuration(int type) {
         float sum;
 
@@ -132,7 +154,11 @@ public class LogsManager {
 
         return duration;
     }
+<<<<<<< HEAD
     @RequiresPermission(Manifest.permission.READ_CALL_LOG)
+=======
+
+>>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
     public List<LogObject> getLogs(int callType,String phone, long timelimit) {
         List<LogObject> logs = new ArrayList<>();
 
