@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        frgM = getSupportFragmentManager()
+        frgM = getSupportFragmentManager();
         mSectionsPagerAdapter = new SectionsPagerAdapter(frgM);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
