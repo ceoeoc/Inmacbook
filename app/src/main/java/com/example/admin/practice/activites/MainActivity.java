@@ -1,12 +1,10 @@
 package com.example.admin.practice.activites;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-<<<<<<< HEAD
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Location;
@@ -18,13 +16,8 @@ import android.os.Message;
 import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-=======
-import android.graphics.Color;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
->>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,10 +36,7 @@ import android.widget.Toast;
 
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DBHandler;
-<<<<<<< HEAD
 import com.example.admin.practice.DB_Manager;
-=======
->>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
 import com.example.admin.practice.fragments.QuestFragment;
@@ -55,43 +45,28 @@ import com.example.admin.practice.fragments.RankingFragment;
 import com.wafflecopter.multicontactpicker.ContactResult;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    DBHandler dh = null;
-    Fragment frg = null;
     private static final int CONTACT_PICKER_REQUEST = 991;
-    FloatingActionButton fab;
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-
-
-    //블루투스 변수
     private static final int REQUEST_ENABLE_BT=2;
 
-    //
+    private ViewPager mViewPager;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    private DBHandler dh = null;
+    private FragmentManager frgM;
+    private Fragment frg = null;
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
         if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -100,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-=======
->>>>>>> 1164e981a013830d39a780e74ea8194195ef7c36
         dh = new DBHandler(this);
         dh.open();
 
@@ -125,11 +98,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Create the adapter that will return a fragment for each of the foursss
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        frgM = getSupportFragmentManager();
+        mSectionsPagerAdapter = new SectionsPagerAdapter(frgM);
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -206,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
                     if(!dh.isExist(ci.get_id())){
                         ci.setName(results.get(i).getDisplayName());
                         ci.setPhone(results.get(i).getPhoneNumbers().get(0));
-                        //ci.setPhoto(getByteArrayFromUri(results.get(i).getPhoto()));
                         ci.setFeat("unknown");
                         ci.setPoint(0);
                         ci.setLevel(0);
@@ -216,32 +186,15 @@ public class MainActivity extends AppCompatActivity {
                         ci = dh.getData(ci.get_id());
                         ci.setName(results.get(i).getDisplayName());
                         ci.setPhone(results.get(i).getPhoneNumbers().get(0));
-                        //ci.setPhoto(getByteArrayFromUri(results.get(i).getPhoto()));
                         dh.update(ci);
                     }
                 }
             } else if(resultCode == RESULT_CANCELED){
                 System.out.println("User closed the picker without selecting items.");
             }
+            mSectionsPagerAdapter.notifyDataSetChanged();
         }
-
-
-        //////블루투스
-
     }
-    /*public byte[] getByteArrayFromUri(Uri uri){
-        try {
-            Bitmap bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.PNG,100,stream);
-            byte[] data = stream.toByteArray();
-
-            return data;
-        }catch(Exception e){
-            Log.e("Insert DO Photo",e.toString());
-        }
-        return null;
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -273,6 +226,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        public  int getItemPosition(Object object){
+            return POSITION_NONE;
+        }
+
+        @Override
         public Fragment getItem(int position) {
             switch(position){
                 case 0:
@@ -294,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 4 total pages.
             return 4;
         }
 
@@ -375,8 +332,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
-
 
     protected void onStart(){
         super.onStart();
