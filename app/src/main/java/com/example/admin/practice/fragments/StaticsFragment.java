@@ -13,7 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.admin.practice.DBHandler;
+import com.example.admin.practice.LogObject;
+import com.example.admin.practice.LogsManager;
 import com.example.admin.practice.R;
+
+import java.util.HashMap;
 
 
 public class StaticsFragment extends Fragment {
@@ -70,9 +74,20 @@ public class StaticsFragment extends Fragment {
                 webView.loadUrl("file:///android_asset/groupchart.html");
                 break;
             case 1:
-                //LogsManager logsManager = new LogsManager(getActivity());
-                //List<LogObject> callLogs = logsManager.getLogs(LogsManager.ALL_CALLS,);
-
+                HashMap<String,Integer> groups = new HashMap<>();
+                groups.put("가족",0);
+                groups.put("친구",0);
+                groups.put("타인",0);
+                groups.put("unknown",0);
+                long subTime = 1000 * 60 * 60 * 24 * -1;
+                long date = System.currentTimeMillis() + 7 * subTime;
+                LogsManager logsManager = new LogsManager(getActivity());
+                groups = logsManager.getLogs(groups,LogsManager.ALL_CALLS,date);
+                num1 = groups.get("가족");
+                num2 = groups.get("친구");
+                num3 = groups.get("타인");
+                num4 = groups.get("unknown");
+                webView.loadUrl("file:///android_asset/groupchart.html");
                 break;
         }
 
