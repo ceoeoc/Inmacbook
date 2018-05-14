@@ -50,6 +50,7 @@ import com.example.admin.practice.PermissionUtil;
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
 import com.example.admin.practice.fragments.QuestFragment;
+import com.example.admin.practice.fragments.SettingPreferenceFragment;
 import com.example.admin.practice.fragments.StaticsFragment;
 import com.example.admin.practice.fragments.RankingFragment;
 import com.wafflecopter.multicontactpicker.ContactResult;
@@ -176,40 +177,43 @@ public class MainActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 settingGPS();
+                double LAT = 0;
+                double LNG = 0;
                 try {
                     Location userLocation = getMyLocation();
 
-                    double LAT = userLocation.getLatitude();
-                    double LNG = userLocation.getLongitude();
-                    long now = System.currentTimeMillis();
-                    Date date = new Date(now);
-                    SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy//MM/dd HH:mm:ss");
-                    String str_datetime = sdfNow.format(date);
-                    TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                    DB_Manager db_manager;
-                    db_manager = new DB_Manager();
-                    String PhoneNum = "";
-                    try {
-                        PhoneNum = telManager.getLine1Number();
-                    } catch (SecurityException e) {
-                        e.printStackTrace();
-                    }
-                    Log.d("aaa", PhoneNum + "onCreate: ");
-                    String str_web_id = PhoneNum;
-                    String str_latitude = String.valueOf(LAT);
-                    String str_longitude = String.valueOf(LNG);
-                    Log.d("aaa", LAT + "  " + LNG + "onCreate: ");
-                    db_manager.information(str_web_id, str_datetime, str_latitude, str_longitude);
-
-                    this.sendEmptyMessageDelayed(0, 30000);
-                }catch(Exception e){
+                    LAT = userLocation.getLatitude();
+                    LNG = userLocation.getLongitude();
+                }catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy//MM/dd HH:mm:ss");
+                String str_datetime = sdfNow.format(date);
+                TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                DB_Manager db_manager;
+                db_manager = new DB_Manager();
+                String PhoneNum = "";
+                try {
+                    PhoneNum = telManager.getLine1Number();
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                }
+                Log.d("aaa", PhoneNum + "onCreate: ");
+                String str_web_id = PhoneNum;
+                String str_latitude = String.valueOf(LAT);
+                String str_longitude = String.valueOf(LNG);
+                Log.d("aaa", LAT + "  " + LNG + "onCreate: ");
+                db_manager.information(str_web_id, str_datetime, str_latitude, str_longitude);
+
+                this.sendEmptyMessageDelayed(0, 30000);
+
             }
         };
         handler.sendEmptyMessage(0);
-
-
+        
             //블루투스 연결위한
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(!mBluetoothAdapter.isEnabled()){
@@ -222,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, intentFilter);
-
-
     }
 
     @Override
@@ -244,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
                         ci.setPoint(0);
                         ci.setLevel(0);
                         ci.setGroup("unknown");
+                        ci.setBluth("0");
                         dh.insert(ci);
                     }else{
                         ci = dh.getData(ci.get_id());
@@ -272,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch(id) {
             case R.id.action_settings:
-                Toast.makeText(this,"액션버튼 setting",Toast.LENGTH_SHORT).show();
+                SettingPreferenceFragment t1 = new SettingPreferenceFragment();
                 return true;
             case R.id.action_profile:
                 Toast.makeText(this,"액션버튼 profile",Toast.LENGTH_SHORT).show();
@@ -401,12 +404,6 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onStart(){
         super.onStart();
-    }
-
-    protected void onStop(){
-        super.onStop();
-        Log.d("멈춤멈춤멈춤", "onStop: ");
-        unregisterReceiver(mReceiver);
     }
 
 }

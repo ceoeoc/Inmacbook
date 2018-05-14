@@ -51,6 +51,7 @@ public class DBHandler {
         cv.put(DBHelper.ColLevel, con.getLevel());
         cv.put(DBHelper.ColFeat, con.getFeat());
         cv.put(DBHelper.ColGroup, con.getGroup());
+        cv.put(DBHelper.ColBluth, con.getBluth());
         // cv.put(DBHelper.ColPhoto, con.getPhoto());
 
         long i = db.insert(DBHelper.TBName, null, cv);
@@ -66,6 +67,7 @@ public class DBHandler {
         cv.put(DBHelper.ColLevel, con.getLevel());
         cv.put(DBHelper.ColFeat, con.getFeat());
         cv.put(DBHelper.ColGroup, con.getGroup());
+        cv.put(DBHelper.ColBluth, con.getBluth());
         //cv.put(DBHelper.ColPhoto, con.getPhoto());
 
         db.update(DBHelper.TBName, cv, DBHelper.ColId + " = " + "'"+ con.get_id()+"'",null);
@@ -86,6 +88,7 @@ public class DBHandler {
         c.setLevel(curs.getInt(4));
         c.setFeat(curs.getString(5));
         c.setGroup(curs.getString(6));
+        c.setBluth(curs.getString(7));
         curs.close();
         return c;
     }
@@ -116,6 +119,7 @@ public class DBHandler {
         c.setLevel(curs.getInt(4));
         c.setFeat(curs.getString(5));
         c.setGroup(curs.getString(6));
+        c.setBluth(curs.getString(7));
         //c.setPhoto(curs.getBlob(7));
         return c;
     }
