@@ -4,6 +4,7 @@ import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.DialogFragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
 
     private List<LogObject> callLogs;
     private WebView mcl;
-    private Button oB,cB,rb,sb;
+    private Button oB,cB;
     private TextView name, phone;
     private Spinner gsp;
     private String mcid;
@@ -73,6 +74,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         phone.setText(mitem.getPhone());
 
         gsp = rootView.findViewById(R.id.gspinner);
+        gsp.setScrollBarSize((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,60.0f,getContext().getResources().getDisplayMetrics()));
         setSpinner();
         long subTime = 1000 * 60 * 60 * 24 * -1;
         long date = System.currentTimeMillis() + 7 * subTime;
@@ -91,20 +93,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
 
         oB = (Button) rootView.findViewById(R.id.confrim);
         cB = (Button) rootView.findViewById(R.id.cancel);
-        rb = (Button) rootView.findViewById(R.id.receivedcall);
-        sb = (Button) rootView.findViewById(R.id.sentcall);
-        LinearLayout in = (LinearLayout)rootView.findViewById(R.id.ratebar);
-        float a,b;
-        a = (float)logsManager.getLogCount(LogsManager.INCOMING_CALLS,mitem.getPhone(),date);
-        b = (float)logsManager.getLogCount(LogsManager.OUTGOING_CALLS,mitem.getPhone(),date);
-        in.setWeightSum(a+b);
-        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT);
-        p.weight = a;
-        rb.setText(rb.getText() + "" + p.weight);
-        rb.setLayoutParams(p);
-        p.weight = b;
-        sb.setText(sb.getText() + "" +  p.weight);
-        sb.setLayoutParams(p);
+
         oB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +137,9 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         gsp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final View v = gsp.getSelectedView();
+                ((TextView) v).setTextSize(30);
+                ((TextView) v).setTextColor(R.color.colorPrimary);
                 selectedGroup = parent.getItemAtPosition(position).toString();
             }
 
