@@ -19,6 +19,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public static String ColLevel = "level";
     public static String ColFeat = "feat";
     public static String ColGroup = "cgroup";
+    public static String ColBluth = "bluth";
     // public static String ColPhoto = "photo";
 
     public static String create =
@@ -28,8 +29,8 @@ public class DBHelper extends SQLiteOpenHelper{
                     + ColPoint + " integer not null, "
                     + ColLevel + " integer not null, "
                     + ColFeat + " text not null, "
-                    + ColGroup + " text not null); ";
-    // + ColPhoto + " blob);";
+                    + ColGroup + " text not null, "
+                    + ColBluth + " text);";
 
     public DBHelper(Context context){
         super(context, DBName, null, DBVersion);

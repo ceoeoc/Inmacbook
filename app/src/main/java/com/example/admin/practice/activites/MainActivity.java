@@ -1,24 +1,39 @@
 package com.example.admin.practice.activites;
 
+<<<<<<< HEAD
+=======
+import android.Manifest;
+>>>>>>> develop-park
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.StrictMode;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
+<<<<<<< HEAD
+=======
+import android.support.v4.app.ActivityCompat;
+>>>>>>> develop-park
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -37,9 +52,14 @@ import android.widget.Toast;
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DBHandler;
 import com.example.admin.practice.DB_Manager;
+<<<<<<< HEAD
+=======
+import com.example.admin.practice.PermissionUtil;
+>>>>>>> develop-park
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
 import com.example.admin.practice.fragments.QuestFragment;
+import com.example.admin.practice.fragments.SettingPreferenceFragment;
 import com.example.admin.practice.fragments.StaticsFragment;
 import com.example.admin.practice.fragments.RankingFragment;
 import com.wafflecopter.multicontactpicker.ContactResult;
@@ -49,10 +69,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CONTACT_PICKER_REQUEST = 991;
     private static final int REQUEST_ENABLE_BT=2;
+<<<<<<< HEAD
+=======
+    private static final int MY_PER_REQ_READ_CONTACTS = 0;
+>>>>>>> develop-park
 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -62,11 +87,65 @@ public class MainActivity extends AppCompatActivity {
     private Fragment frg = null;
     private FloatingActionButton fab;
 
+<<<<<<< HEAD
+=======
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        if(requestCode == 1){
+            if(PermissionUtil.verifyPermission(grantResults)){
+
+            }else{
+                showRequestAgainDialog();
+            }
+        }else{
+            super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        }
+    }
+
+    private void showRequestAgainDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("이 권한은 꼭 필요한 권한이므로, 설정에서 활성화 부탁드립니다");
+        builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try{
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            .setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                } catch(ActivityNotFoundException e){
+                    e.printStackTrace();
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+    }
+
+>>>>>>> develop-park
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
+=======
+        if(PermissionUtil.checkPermissions(this,new String[]{Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS,Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_CALL_LOG,
+                Manifest.permission.READ_CALL_LOG})){
+
+        }else{
+            PermissionUtil.requestAllPermissions(this);
+        }
+
+>>>>>>> develop-park
         if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -116,12 +195,18 @@ public class MainActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 settingGPS();
+                double LAT = 0;
+                double LNG = 0;
+                try {
+                    Location userLocation = getMyLocation();
 
-                Location userLocation = getMyLocation();
+                    LAT = userLocation.getLatitude();
+                    LNG = userLocation.getLongitude();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                double LAT = userLocation.getLatitude();
-                double LNG = userLocation.getLongitude();
-                long now =System.currentTimeMillis();
+                long now = System.currentTimeMillis();
                 Date date = new Date(now);
                 SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy//MM/dd HH:mm:ss");
                 String str_datetime = sdfNow.format(date);
@@ -138,15 +223,15 @@ public class MainActivity extends AppCompatActivity {
                 String str_web_id = PhoneNum;
                 String str_latitude = String.valueOf(LAT);
                 String str_longitude = String.valueOf(LNG);
-                Log.d("aaa", LAT +"  "+ LNG + "onCreate: ");
-                db_manager.information(str_web_id,str_datetime ,str_latitude, str_longitude);
+                Log.d("aaa", LAT + "  " + LNG + "onCreate: ");
+                db_manager.information(str_web_id, str_datetime, str_latitude, str_longitude);
 
                 this.sendEmptyMessageDelayed(0, 30000);
+
             }
         };
         handler.sendEmptyMessage(0);
-
-
+        
             //블루투스 연결위한
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(!mBluetoothAdapter.isEnabled()){
@@ -159,8 +244,6 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, intentFilter);
-
-
     }
 
     @Override
@@ -181,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
                         ci.setPoint(0);
                         ci.setLevel(0);
                         ci.setGroup("unknown");
+                        ci.setBluth("0");
                         dh.insert(ci);
                     }else{
                         ci = dh.getData(ci.get_id());
@@ -209,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch(id) {
             case R.id.action_settings:
-                Toast.makeText(this,"액션버튼 setting",Toast.LENGTH_SHORT).show();
+                SettingPreferenceFragment t1 = new SettingPreferenceFragment();
                 return true;
             case R.id.action_profile:
                 Toast.makeText(this,"액션버튼 profile",Toast.LENGTH_SHORT).show();
@@ -276,15 +360,18 @@ public class MainActivity extends AppCompatActivity {
     private LocationListener locationListener;
 
     private Location getMyLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
         Location currentLocation;
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, locationListener);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, locationListener);
 
         String locationProvider = LocationManager.GPS_PROVIDER;
         currentLocation = locationManager.getLastKnownLocation(locationProvider);
+
         double lng = currentLocation.getLongitude();
         double lat = currentLocation.getLatitude();
-
         return currentLocation;
     }
 
@@ -335,12 +422,6 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onStart(){
         super.onStart();
-    }
-
-    protected void onStop(){
-        super.onStop();
-        Log.d("멈춤멈춤멈춤", "onStop: ");
-        unregisterReceiver(mReceiver);
     }
 
 }

@@ -12,10 +12,11 @@ public class ContactsItem implements Parcelable {
     private int level;
     private String feat;
     private String group;
+    private String bluth;
     //private byte[] photo;
     public ContactsItem(){}
-    public ContactsItem(String _id, String name, String phone, int point, int level, String feat, String group){
-        this._id = _id; this.name = name; this.phone = phone; this.point = point; this.level = level; this.feat = feat; this.group = group;
+    public ContactsItem(String _id, String name, String phone, int point, int level, String feat, String group,String bluth){
+        this._id = _id; this.name = name; this.phone = phone; this.point = point; this.level = level; this.feat = feat; this.group = group;this.bluth = bluth;
     }
 
     protected ContactsItem(Parcel src){
@@ -36,6 +37,7 @@ public class ContactsItem implements Parcelable {
     public void setGroup(String group){
         this.group = group;
     }
+    public void setBluth(String bluth){this.bluth = bluth;}
     //public void setPhoto(byte[] photo){this.photo = photo;}
 
     public String get_id() {
@@ -55,6 +57,7 @@ public class ContactsItem implements Parcelable {
         return feat;
     }
     public String getGroup(){ return group;  }
+    public String getBluth(){return bluth; }
     //public byte[] getPhoto() { return photo;  }
 
     @Override
@@ -70,6 +73,7 @@ public class ContactsItem implements Parcelable {
         dest.writeInt(level);
         dest.writeString(feat);
         dest.writeString(group);
+        dest.writeString(bluth);
     }
 
     private void readFromParcel(Parcel src ){
@@ -80,6 +84,7 @@ public class ContactsItem implements Parcelable {
         level = src.readInt();
         feat = src.readString();
         group = src.readString();
+        bluth = src.readString();
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){

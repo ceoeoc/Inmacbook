@@ -4,6 +4,10 @@ import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.DialogFragment;
+<<<<<<< HEAD
+=======
+import android.util.TypedValue;
+>>>>>>> develop-park
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,8 +41,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     private List<LogObject> callLogs;
     private WebView mcl;
     private Button oB,cB;
-    private EditText name;
-    private TextView phone;
+    private TextView name, phone;
     private Spinner gsp;
     private String mcid;
     private String selectedGroup;
@@ -67,23 +71,13 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         dh.open();
         mitem = dh.getData(mcid);
 
-        name = (EditText) rootView.findViewById(R.id.name);
+        name = (TextView) rootView.findViewById(R.id.name);
         phone = (TextView) rootView.findViewById(R.id.phone);
         name.setText(mitem.getName());
-        name.setClickable(false);
-        name.setFocusable(false);
-        name.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                name.setFocusableInTouchMode(true);
-                name.setClickable(true);
-                name.setFocusable(true);
-                return false;
-            }
-        });
         phone.setText(mitem.getPhone());
 
         gsp = rootView.findViewById(R.id.gspinner);
+        gsp.setScrollBarSize((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,60.0f,getContext().getResources().getDisplayMetrics()));
         setSpinner();
         long subTime = 1000 * 60 * 60 * 24 * -1;
         long date = System.currentTimeMillis() + 7 * subTime;
@@ -146,6 +140,9 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         gsp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final View v = gsp.getSelectedView();
+                ((TextView) v).setTextSize(30);
+                ((TextView) v).setTextColor(R.color.colorPrimary);
                 selectedGroup = parent.getItemAtPosition(position).toString();
             }
 
