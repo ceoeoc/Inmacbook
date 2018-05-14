@@ -25,7 +25,6 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +49,6 @@ import com.example.admin.practice.PermissionUtil;
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
 import com.example.admin.practice.fragments.QuestFragment;
-import com.example.admin.practice.fragments.SettingPreferenceFragment;
 import com.example.admin.practice.fragments.StaticsFragment;
 import com.example.admin.practice.fragments.RankingFragment;
 import com.wafflecopter.multicontactpicker.ContactResult;
@@ -60,12 +58,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CONTACT_PICKER_REQUEST = 991;
     private static final int REQUEST_ENABLE_BT=2;
-    private static final int MY_PER_REQ_READ_CONTACTS = 0;
 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -129,11 +125,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
-
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
             StrictMode.setThreadPolicy(policy);
-
         }
 
         dh = new DBHandler(this);
@@ -223,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> bluetoothList = new ArrayList<>();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mBluetoothAdapter.startDiscovery();
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, intentFilter);
@@ -275,7 +269,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch(id) {
             case R.id.action_settings:
-                SettingPreferenceFragment t1 = new SettingPreferenceFragment();
+                Intent i = new Intent(this, PreferenceActivity.class);
+                startActivity(i);
                 return true;
             case R.id.action_profile:
                 Toast.makeText(this,"액션버튼 profile",Toast.LENGTH_SHORT).show();

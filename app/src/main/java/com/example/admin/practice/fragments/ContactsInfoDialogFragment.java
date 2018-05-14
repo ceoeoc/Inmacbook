@@ -139,7 +139,6 @@ public class ContactsInfoDialogFragment extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final View v = gsp.getSelectedView();
                 ((TextView) v).setTextSize(30);
-                ((TextView) v).setTextColor(R.color.colorPrimary);
                 selectedGroup = parent.getItemAtPosition(position).toString();
             }
 

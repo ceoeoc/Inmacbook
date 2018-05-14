@@ -74,7 +74,6 @@ public class ContactsFragment extends Fragment {
                                 ContactsInfoDialogFragment Cdialog = ContactsInfoDialogFragment.newInstance(selectedContacts.get_id());
                                 Cdialog.setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light );
                                 Cdialog.show(getFragmentManager(),"ContactsInfoDialogFragment");
-
                                 break;
                             case "데이터 제거":
                                 AlertDialog.Builder removeBuilder = new AlertDialog.Builder(getActivity());

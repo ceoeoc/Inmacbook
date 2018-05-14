@@ -15,7 +15,7 @@ public class QuestFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab2_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.event_fragment, container, false);
         button = (Button)rootView.findViewById(R.id.addEvent);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
