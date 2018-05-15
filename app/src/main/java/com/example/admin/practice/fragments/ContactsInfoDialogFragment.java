@@ -23,7 +23,9 @@ import com.example.admin.practice.DBHandler;
 import com.example.admin.practice.LogObject;
 import com.example.admin.practice.LogsManager;
 import com.example.admin.practice.R;
+import com.example.admin.practice.activites.MainActivity;
 import com.example.admin.practice.adapters.LogsAdapter;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     private WebView mcl;
     private Button oB,cB;
     private TextView name, phone;
-    private Spinner gsp;
+    private MaterialSpinner gsp;
     private String mcid;
     private String selectedGroup;
 
@@ -73,8 +75,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         name.setText(mitem.getName());
         phone.setText(mitem.getPhone());
 
-        gsp = rootView.findViewById(R.id.gspinner);
-        gsp.setScrollBarSize((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,60.0f,getContext().getResources().getDisplayMetrics()));
+        gsp = (MaterialSpinner) rootView.findViewById(R.id.gspinner);
         setSpinner();
         long subTime = 1000 * 60 * 60 * 24 * -1;
         long date = System.currentTimeMillis() + 7 * subTime;
@@ -117,33 +118,12 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     }
 
     public void setSpinner(){
-        ArrayAdapter groupAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.group , android.R.layout.simple_spinner_item);
-        groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        gsp.setAdapter(groupAdapter);
-        switch(mitem.getGroup()){
-            case "가족":
-                gsp.setSelection(0);
-                break;
-            case "친구":
-                gsp.setSelection(1);
-                break;
-            case "타인":
-                gsp.setSelection(2);
-                break;
-            case "unknown":
-                gsp.setSelection(3);
-                break;
-        }
-        gsp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                final View v = gsp.getSelectedView();
-                ((TextView) v).setTextSize(30);
-                selectedGroup = parent.getItemAtPosition(position).toString();
-            }
+        gsp.setItems(MainActivity.groups);
+
+        gsp.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
 
             }
         });

@@ -14,6 +14,7 @@
             android:key = "setting_activity_refresh"
             android:title = "주소록 새로고침"
             android:selectable="true"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

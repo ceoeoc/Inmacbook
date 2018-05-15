@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -19,6 +20,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -54,13 +56,17 @@ import com.example.admin.practice.fragments.RankingFragment;
 import com.wafflecopter.multicontactpicker.ContactResult;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int CONTACT_PICKER_REQUEST = 991;
+    public static final int CONTACT_PICKER_REQUEST = 991;
+    public static ArrayList<String> groups;
     private static final int REQUEST_ENABLE_BT=2;
 
     private ViewPager mViewPager;
@@ -70,6 +76,39 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager frgM;
     private Fragment frg = null;
     private FloatingActionButton fab;
+
+    private void setStringArrayPref(Context context, String key, ArrayList<String> values){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        JSONArray a = new JSONArray();
+        for(int i = 0 ; i < values.size(); i++){
+            a.put(values.get(i));
+        }
+        if(!values.isEmpty()){
+            editor.putString(key, a.toString());
+        }else{
+            editor.putString(key,null);
+        }
+        editor.apply();
+    }
+
+    private ArrayList<String> getStringArrayPref(Context context, String key){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = pref.getString(key,null);
+        ArrayList<String> urls = new ArrayList<String>();
+        if(json != null){
+            try{
+                JSONArray a = new JSONArray(json);
+                for(int i = 0 ; i < a.length();i++){
+                    String url = a.optString(i);
+                    urls.add(url);
+                }
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
+        return urls;
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
@@ -128,29 +167,17 @@ public class MainActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        groups = new ArrayList<String>();
+        groups.add("가족");
+        groups.add("친구");
+        if(groups.addAll( getStringArrayPref(this,"groups"))){
 
+        }
         dh = new DBHandler(this);
         dh.open();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new MultiContactPicker.Builder(MainActivity.this) //Activity/fragment context
-                        .theme(R.style.MyCustomPickerTheme) //Optional - default: MultiContactPicker.Azure
-                        .hideScrollbar(false) //Optional - default: false
-                        .showTrack(true) //Optional - default: true
-                        .searchIconColor(Color.WHITE) //Option - default: White
-                        .setChoiceMode(MultiContactPicker.CHOICE_MODE_MULTIPLE) //Optional - default: CHOICE_MODE_MULTIPLE
-                        .handleColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary)) //Optional - default: Azure Blue
-                        .bubbleColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary)) //Optional - default: Azure Blue
-                        .bubbleTextColor(Color.WHITE) //Optional - default: White
-                        .showPickerForResult(CONTACT_PICKER_REQUEST);
-            }
-        });
 
         frgM = getSupportFragmentManager();
         mSectionsPagerAdapter = new SectionsPagerAdapter(frgM);
