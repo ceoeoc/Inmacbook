@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.eventMake">
 
     <Button
@@ -39,14 +40,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText3" />
 
-    <Button
+    <NumberPicker
         android:id="@+id/timeMeasure"
         android:layout_width="220dp"
         android:layout_height="58dp"
         android:layout_marginStart="80dp"
         android:layout_marginTop="28dp"
-        android:onClick="onMeasureHourClicked"
-        android:text="시간 선택"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/endDateButton" />
 

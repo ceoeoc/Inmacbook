@@ -9,9 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.admin.practice.R;
+import com.example.admin.practice.SelectPosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +21,17 @@ import java.util.List;
 public class eventMake extends AppCompatActivity {
 
     TextView TxtDate;
+    NumberPicker Picker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_make);
+        onMeasureHour();
     }
 
     public void onSelectPersonClicked(View v){
 
-        Intent intent = new Intent(getApplicationContext(),selectPerson.class);
+        Intent intent = new Intent(getApplicationContext(),SelectPosition.class);
         startActivity(intent);
     }
 
@@ -71,51 +75,13 @@ public class eventMake extends AppCompatActivity {
         }
     };
 
-    public void onMeasureHourClicked(View v)
-    {
-        final List<String> ListItems = new ArrayList<>();
-        ListItems.add("1hour");
-        ListItems.add("2hour");
-        ListItems.add("3hour");
-        ListItems.add("4hour");
-        ListItems.add("5hour");
-        ListItems.add("6hour");
-        ListItems.add("7hour");
-        ListItems.add("8hour");
-        final CharSequence[] items =  ListItems.toArray(new String[ ListItems.size()]);
 
-        final List SelectedItems  = new ArrayList();
-        int defaultItem = 0;
-        SelectedItems.add(defaultItem);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("AlertDialog Title");
-        builder.setSingleChoiceItems(items, defaultItem,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SelectedItems.clear();
-                        SelectedItems.add(which);
-                    }
-                });
-        builder.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String msg="";
-
-                        if (!SelectedItems.isEmpty()) {
-                            int index = (int) SelectedItems.get(0);
-                            msg = ListItems.get(index);
-                        }
-                    }
-                });
-        builder.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-        builder.show();
+    public void onMeasureHour() {
+        Picker=(NumberPicker)findViewById(R.id.timeMeasure);
+        Picker.setMaxValue(120);
+        Picker.setMinValue(0);
+        Picker.setWrapSelectorWheel(true);
+        Picker.setValue(3);
     }
 
 }

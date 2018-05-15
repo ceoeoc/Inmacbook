@@ -4,10 +4,9 @@ import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.DialogFragment;
-<<<<<<< HEAD
-=======
+
 import android.util.TypedValue;
->>>>>>> develop-park
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

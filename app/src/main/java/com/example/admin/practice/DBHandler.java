@@ -20,7 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHandler {
+public class  DBHandler {
     DBHelper dh;
     SQLiteDatabase db;
     public DBHandler(Context context){

@@ -1,9 +1,7 @@
 package com.example.admin.practice.activites;
 
-<<<<<<< HEAD
-=======
 import android.Manifest;
->>>>>>> develop-park
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -26,10 +24,9 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-<<<<<<< HEAD
-=======
+
 import android.support.v4.app.ActivityCompat;
->>>>>>> develop-park
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -52,10 +49,9 @@ import android.widget.Toast;
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DBHandler;
 import com.example.admin.practice.DB_Manager;
-<<<<<<< HEAD
-=======
+
 import com.example.admin.practice.PermissionUtil;
->>>>>>> develop-park
+
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
 import com.example.admin.practice.fragments.QuestFragment;
@@ -74,10 +70,8 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
     private static final int CONTACT_PICKER_REQUEST = 991;
     private static final int REQUEST_ENABLE_BT=2;
-<<<<<<< HEAD
-=======
+
     private static final int MY_PER_REQ_READ_CONTACTS = 0;
->>>>>>> develop-park
 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -87,8 +81,6 @@ public class MainActivity extends AppCompatActivity {
     private Fragment frg = null;
     private FloatingActionButton fab;
 
-<<<<<<< HEAD
-=======
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         if(requestCode == 1){
@@ -128,14 +120,11 @@ public class MainActivity extends AppCompatActivity {
         builder.create();
     }
 
->>>>>>> develop-park
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
-=======
         if(PermissionUtil.checkPermissions(this,new String[]{Manifest.permission.READ_CONTACTS,
                 Manifest.permission.WRITE_CONTACTS,Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_CALL_LOG,
@@ -145,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
             PermissionUtil.requestAllPermissions(this);
         }
 
->>>>>>> develop-park
         if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
