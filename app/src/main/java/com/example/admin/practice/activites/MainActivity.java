@@ -1,7 +1,10 @@
 package com.example.admin.practice.activites;
 
 import android.Manifest;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 62af33d669010af2cb52cc79f7f5204c23f0ce21
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -10,8 +13,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,16 +23,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 
 import android.support.v4.app.ActivityCompat;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 62af33d669010af2cb52cc79f7f5204c23f0ce21
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -42,35 +47,43 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import android.widget.Toast;
 
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DBHandler;
 import com.example.admin.practice.DB_Manager;
+<<<<<<< HEAD
 
 import com.example.admin.practice.PermissionUtil;
 
+=======
+import com.example.admin.practice.PermissionUtil;
+>>>>>>> 62af33d669010af2cb52cc79f7f5204c23f0ce21
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
 import com.example.admin.practice.fragments.QuestFragment;
-import com.example.admin.practice.fragments.SettingPreferenceFragment;
 import com.example.admin.practice.fragments.StaticsFragment;
 import com.example.admin.practice.fragments.RankingFragment;
 import com.wafflecopter.multicontactpicker.ContactResult;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int CONTACT_PICKER_REQUEST = 991;
+    public static final int CONTACT_PICKER_REQUEST = 991;
+    public static ArrayList<String> groups;
     private static final int REQUEST_ENABLE_BT=2;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 62af33d669010af2cb52cc79f7f5204c23f0ce21
     private static final int MY_PER_REQ_READ_CONTACTS = 0;
 
     private ViewPager mViewPager;
@@ -81,6 +94,42 @@ public class MainActivity extends AppCompatActivity {
     private Fragment frg = null;
     private FloatingActionButton fab;
 
+<<<<<<< HEAD
+=======
+    private void setStringArrayPref(Context context, String key, ArrayList<String> values){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        JSONArray a = new JSONArray();
+        for(int i = 0 ; i < values.size(); i++){
+            a.put(values.get(i));
+        }
+        if(!values.isEmpty()){
+            editor.putString(key, a.toString());
+        }else{
+            editor.putString(key,null);
+        }
+        editor.apply();
+    }
+
+    private ArrayList<String> getStringArrayPref(Context context, String key){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = pref.getString(key,null);
+        ArrayList<String> urls = new ArrayList<String>();
+        if(json != null){
+            try{
+                JSONArray a = new JSONArray(json);
+                for(int i = 0 ; i < a.length();i++){
+                    String url = a.optString(i);
+                    urls.add(url);
+                }
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
+        return urls;
+    }
+
+>>>>>>> 62af33d669010af2cb52cc79f7f5204c23f0ce21
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         if(requestCode == 1){
@@ -135,35 +184,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
-
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
             StrictMode.setThreadPolicy(policy);
+        }
+        groups = new ArrayList<String>();
+        groups.add("가족");
+        groups.add("친구");
+        if(groups.addAll( getStringArrayPref(this,"groups"))){
 
         }
-
         dh = new DBHandler(this);
         dh.open();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new MultiContactPicker.Builder(MainActivity.this) //Activity/fragment context
-                        .theme(R.style.MyCustomPickerTheme) //Optional - default: MultiContactPicker.Azure
-                        .hideScrollbar(false) //Optional - default: false
-                        .showTrack(true) //Optional - default: true
-                        .searchIconColor(Color.WHITE) //Option - default: White
-                        .setChoiceMode(MultiContactPicker.CHOICE_MODE_MULTIPLE) //Optional - default: CHOICE_MODE_MULTIPLE
-                        .handleColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary)) //Optional - default: Azure Blue
-                        .bubbleColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary)) //Optional - default: Azure Blue
-                        .bubbleTextColor(Color.WHITE) //Optional - default: White
-                        .showPickerForResult(CONTACT_PICKER_REQUEST);
-            }
-        });
 
         frgM = getSupportFragmentManager();
         mSectionsPagerAdapter = new SectionsPagerAdapter(frgM);
@@ -229,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> bluetoothList = new ArrayList<>();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mBluetoothAdapter.startDiscovery();
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, intentFilter);
@@ -281,7 +316,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch(id) {
             case R.id.action_settings:
-                SettingPreferenceFragment t1 = new SettingPreferenceFragment();
+                Intent i = new Intent(this, PreferenceActivity.class);
+                startActivity(i);
                 return true;
             case R.id.action_profile:
                 Toast.makeText(this,"액션버튼 profile",Toast.LENGTH_SHORT).show();

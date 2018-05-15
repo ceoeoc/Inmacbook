@@ -3,8 +3,6 @@
     <string-array name="group">
         <item>가족</item>
         <item>친구</item>
-        <item>타인</item>
-        <item>정의되지 않음</item>
     </string-array>
 
     <string-array name="statics">

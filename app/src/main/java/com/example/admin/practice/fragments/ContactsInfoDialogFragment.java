@@ -4,20 +4,18 @@ import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.DialogFragment;
+<<<<<<< HEAD
 
 import android.util.TypedValue;
 
+=======
+>>>>>>> 62af33d669010af2cb52cc79f7f5204c23f0ce21
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.admin.practice.ContactsItem;
@@ -25,7 +23,9 @@ import com.example.admin.practice.DBHandler;
 import com.example.admin.practice.LogObject;
 import com.example.admin.practice.LogsManager;
 import com.example.admin.practice.R;
+import com.example.admin.practice.activites.MainActivity;
 import com.example.admin.practice.adapters.LogsAdapter;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     private WebView mcl;
     private Button oB,cB;
     private TextView name, phone;
-    private Spinner gsp;
+    private MaterialSpinner gsp;
     private String mcid;
     private String selectedGroup;
 
@@ -75,8 +75,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         name.setText(mitem.getName());
         phone.setText(mitem.getPhone());
 
-        gsp = rootView.findViewById(R.id.gspinner);
-        gsp.setScrollBarSize((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,60.0f,getContext().getResources().getDisplayMetrics()));
+        gsp = (MaterialSpinner) rootView.findViewById(R.id.gspinner);
         setSpinner();
         long subTime = 1000 * 60 * 60 * 24 * -1;
         long date = System.currentTimeMillis() + 7 * subTime;
@@ -119,34 +118,12 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     }
 
     public void setSpinner(){
-        ArrayAdapter groupAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.group , android.R.layout.simple_spinner_item);
-        groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        gsp.setAdapter(groupAdapter);
-        switch(mitem.getGroup()){
-            case "가족":
-                gsp.setSelection(0);
-                break;
-            case "친구":
-                gsp.setSelection(1);
-                break;
-            case "타인":
-                gsp.setSelection(2);
-                break;
-            case "unknown":
-                gsp.setSelection(3);
-                break;
-        }
-        gsp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                final View v = gsp.getSelectedView();
-                ((TextView) v).setTextSize(30);
-                ((TextView) v).setTextColor(R.color.colorPrimary);
-                selectedGroup = parent.getItemAtPosition(position).toString();
-            }
+        gsp.setItems(MainActivity.groups);
+
+        gsp.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
 
             }
         });

@@ -6,28 +6,27 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal">
 
         <ProgressBar
             android:id="@+id/pgb"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="420dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:max="100"
             android:progressDrawable="@drawable/custom_progressbar" />
 
         <TextView
             android:id="@+id/tv_name"
+            android:layout_marginLeft="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="serif"
-            android:text="name.."
+            android:layout_gravity="center"
+            android:fontFamily="@font/notosanscjdemilight"
             android:textAllCaps="false"
             android:textColor="#000000"
-            android:textSize="40sp" />
+            android:textSize="20sp" />
 
 
     </FrameLayout>

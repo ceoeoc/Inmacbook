@@ -31,7 +31,7 @@ public class eventMake extends AppCompatActivity {
 
     public void onSelectPersonClicked(View v){
 
-        Intent intent = new Intent(getApplicationContext(),SelectPosition.class);
+        Intent intent = new Intent(getApplicationContext(),selectPerson.class);
         startActivity(intent);
     }
 
