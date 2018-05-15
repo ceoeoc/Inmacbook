@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="설정">
+    <CheckBoxPreference
+        android:key="pref_sync"
+        android:title="A"
+        android:summary="B"
+        android:defaultValue="true" />
+
+    <PreferenceCategory android:title="주소록">
+
+        <Preference
+            android:key = "setting_activity_refresh"
+            android:title = "주소록 새로고침"
+            android:selectable="true"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

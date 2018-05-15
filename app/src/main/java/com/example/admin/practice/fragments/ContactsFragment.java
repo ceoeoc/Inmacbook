@@ -3,22 +3,31 @@ package com.example.admin.practice.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DBHandler;
+import com.example.admin.practice.activites.MainActivity;
 import com.example.admin.practice.adapters.ContactsAdapter;
 import com.example.admin.practice.R;
+import com.github.clans.fab.FloatingActionButton;
+import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
 import java.sql.Ref;
 import java.util.ArrayList;
@@ -32,7 +41,7 @@ public class ContactsFragment extends Fragment {
     private List<ContactsItem> lists;
     private ContactsAdapter mAdapter;
     private ContactsItem selectedContacts;
-
+    private FloatingActionButton cfab,gfab;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,6 +58,50 @@ public class ContactsFragment extends Fragment {
             mAdapter.addItem(lists.get(i));
         }
         mListView.setAdapter(mAdapter);
+
+        cfab = (FloatingActionButton) rootView.findViewById(R.id.cafab);
+        cfab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MultiContactPicker.Builder(getActivity()) //Activity/fragment context
+                        .theme(R.style.MyCustomPickerTheme) //Optional - default: MultiContactPicker.Azure
+                        .hideScrollbar(false) //Optional - default: false
+                        .showTrack(true) //Optional - default: true
+                        .searchIconColor(Color.WHITE) //Option - default: White
+                        .setChoiceMode(MultiContactPicker.CHOICE_MODE_MULTIPLE) //Optional - default: CHOICE_MODE_MULTIPLE
+                        .handleColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary)) //Optional - default: Azure Blue
+                        .bubbleColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary)) //Optional - default: Azure Blue
+                        .bubbleTextColor(Color.WHITE) //Optional - default: White
+                        .showPickerForResult(MainActivity.CONTACT_PICKER_REQUEST);
+            }
+        });
+
+        gfab = (FloatingActionButton) rootView.findViewById(R.id.gmfab);
+        gfab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("그룹 추가");
+                final EditText et = new EditText(getActivity());
+                et.setHint("추가할 그룹 이름을 입력해주세요.");
+                builder.setView(et);
+                builder.setPositiveButton("추가하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String value = et.getText().toString();
+                        MainActivity.groups.add(value);
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("취소하기" , new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
 
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -74,7 +127,6 @@ public class ContactsFragment extends Fragment {
                                 ContactsInfoDialogFragment Cdialog = ContactsInfoDialogFragment.newInstance(selectedContacts.get_id());
                                 Cdialog.setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light );
                                 Cdialog.show(getFragmentManager(),"ContactsInfoDialogFragment");
-
                                 break;
                             case "데이터 제거":
                                 AlertDialog.Builder removeBuilder = new AlertDialog.Builder(getActivity());

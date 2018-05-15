@@ -85,8 +85,6 @@ public class LogsAdapter extends ArrayAdapter<LogObject> {
                 break;
 
         }
-
-
         return row;
     }
 }

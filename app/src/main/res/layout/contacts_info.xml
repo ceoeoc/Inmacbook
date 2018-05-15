@@ -84,7 +84,8 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:textSize="30sp"
+            android:fontFamily="@font/notosanscjdemilight"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/useric"
             app:layout_constraintTop_toTopOf="parent" />
@@ -96,19 +97,21 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:textSize="30sp"
+            android:fontFamily="@font/notosanscjdemilight"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/phoneic"
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
-        <Spinner
+        <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/gspinner"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:textAlignment="center"
+            android:fontFamily="@font/notosanscjdemilight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.531"
             app:layout_constraintStart_toEndOf="@+id/groupic"

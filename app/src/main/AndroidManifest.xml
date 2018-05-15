@@ -30,8 +30,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activites.PreferenceActivity"
+            android:label="@string/action_settings"/>
         <activity android:name=".fragments.eventMake" />
-        <activity android:name=".fragments.selectPerson"></activity>
+        <activity android:name=".fragments.selectPerson" />
     </application>
 
 </manifest>
