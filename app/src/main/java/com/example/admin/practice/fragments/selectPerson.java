@@ -5,9 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ListView;
 
-import com.example.admin.practice.DBHandler;
 import com.example.admin.practice.R;
 
 import java.util.ArrayList;

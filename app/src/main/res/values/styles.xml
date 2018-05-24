@@ -56,4 +56,10 @@
         <item name="fab_colorPressed">#2272CD</item>
         <item name="fab_colorRipple">#62B2FF</item>
     </style>
+
+    <style name="AccentButton" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="colorButtonNormal">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
+        <!-- customize colorAccent for the enabled color -->
+    </style>
 </resources>

@@ -3,6 +3,7 @@ package com.example.admin.practice.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,12 +48,21 @@ public class ContactsAdapter extends BaseAdapter {
 
         TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);
         ProgressBar pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
-
+        ImageView iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
+        ImageView iv_plus = (ImageView) convertView.findViewById(R.id.iv_plus);
         ContactsItem myItem = getItem(position);
 
         tv_name.setText(myItem.getName());
         pgb.setProgress(myItem.getPoint());
+        if(myItem.getBluth().toString() != "unknown"){
+            iv_plus.setVisibility(View.INVISIBLE);
+        }
+        iv_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         return convertView;
     }
 

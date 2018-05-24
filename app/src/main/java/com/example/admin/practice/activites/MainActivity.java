@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,7 +26,6 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -40,13 +38,12 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import android.widget.Toast;
 
 import com.example.admin.practice.ContactsItem;
-import com.example.admin.practice.DBHandler;
-import com.example.admin.practice.DB_Manager;
+import com.example.admin.practice.DB.CIDBHandler;
+import com.example.admin.practice.DB.DB_Manager;
 import com.example.admin.practice.PermissionUtil;
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
@@ -72,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private DBHandler dh = null;
+    private CIDBHandler dh = null;
     private FragmentManager frgM;
     private Fragment frg = null;
     private FloatingActionButton fab;
 
-    private void setStringArrayPref(Context context, String key, ArrayList<String> values){
+    public static void setStringArrayPref(Context context, String key, ArrayList<String> values){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         JSONArray a = new JSONArray();
@@ -90,22 +87,22 @@ public class MainActivity extends AppCompatActivity {
             editor.putString(key,null);
         }
         editor.apply();
-    }
+        }
 
-    private ArrayList<String> getStringArrayPref(Context context, String key){
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        String json = pref.getString(key,null);
-        ArrayList<String> urls = new ArrayList<String>();
-        if(json != null){
-            try{
-                JSONArray a = new JSONArray(json);
-                for(int i = 0 ; i < a.length();i++){
-                    String url = a.optString(i);
-                    urls.add(url);
+        private ArrayList<String> getStringArrayPref(Context context, String key){
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+            String json = pref.getString(key,null);
+            ArrayList<String> urls = new ArrayList<String>();
+            if(json != null){
+                try{
+                    JSONArray a = new JSONArray(json);
+                    for(int i = 0 ; i < a.length();i++){
+                        String url = a.optString(i);
+                        urls.add(url);
+                    }
+                }catch(JSONException e){
+                    e.printStackTrace();
                 }
-            }catch(JSONException e){
-                e.printStackTrace();
-            }
         }
         return urls;
     }
@@ -168,12 +165,12 @@ public class MainActivity extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
         }
         groups = new ArrayList<String>();
-        groups.add("가족");
-        groups.add("친구");
         if(groups.addAll( getStringArrayPref(this,"groups"))){
 
+        }else{
+            groups.add("정의 되지 않음");
         }
-        dh = new DBHandler(this);
+        dh = new CIDBHandler(this);
         dh.open();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -267,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                         ci.setPoint(0);
                         ci.setLevel(0);
                         ci.setGroup("unknown");
-                        ci.setBluth("0");
+                        ci.setBluth("unknown");
                         dh.insert(ci);
                     }else{
                         ci = dh.getData(ci.get_id());

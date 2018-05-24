@@ -1,7 +1,6 @@
 package com.example.admin.practice.fragments;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,31 +11,26 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.practice.ContactsItem;
-import com.example.admin.practice.DBHandler;
+import com.example.admin.practice.DB.CIDBHandler;
 import com.example.admin.practice.activites.MainActivity;
 import com.example.admin.practice.adapters.ContactsAdapter;
 import com.example.admin.practice.R;
 import com.github.clans.fab.FloatingActionButton;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ContactsFragment extends Fragment {
 
-    private DBHandler dh;
+    private CIDBHandler dh;
     private ListView mListView;
     private List<ContactsItem> lists;
     private ContactsAdapter mAdapter;
@@ -50,7 +44,7 @@ public class ContactsFragment extends Fragment {
 
         mAdapter = new ContactsAdapter();
 
-        dh = new DBHandler(getActivity());
+        dh = new CIDBHandler(getActivity());
         dh.open();
         lists = dh.getData();
 
@@ -90,6 +84,7 @@ public class ContactsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String value = et.getText().toString();
                         MainActivity.groups.add(value);
+                        MainActivity.setStringArrayPref(getActivity(),"groups",MainActivity.groups);
                         dialog.dismiss();
                     }
                 });
@@ -125,7 +120,7 @@ public class ContactsFragment extends Fragment {
                                 break;
                             case "자세히 보기":
                                 ContactsInfoDialogFragment Cdialog = ContactsInfoDialogFragment.newInstance(selectedContacts.get_id());
-                                Cdialog.setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light );
+                                Cdialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
                                 Cdialog.show(getFragmentManager(),"ContactsInfoDialogFragment");
                                 break;
                             case "데이터 제거":
