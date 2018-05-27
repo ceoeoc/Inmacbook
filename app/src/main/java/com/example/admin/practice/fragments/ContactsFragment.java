@@ -46,9 +46,11 @@ public class ContactsFragment extends Fragment {
 
         dh = new CIDBHandler(getActivity());
         dh.open();
-        lists = dh.getData();
+        int orderby = 1;
+        lists = dh.getData(orderby);
 
         for(int i = 0 ; i < lists.size() ; i++){
+
             mAdapter.addItem(lists.get(i));
         }
         mListView.setAdapter(mAdapter);
@@ -74,27 +76,9 @@ public class ContactsFragment extends Fragment {
         gfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("그룹 추가");
-                final EditText et = new EditText(getActivity());
-                et.setHint("추가할 그룹 이름을 입력해주세요.");
-                builder.setView(et);
-                builder.setPositiveButton("추가하기", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String value = et.getText().toString();
-                        MainActivity.groups.add(value);
-                        MainActivity.setStringArrayPref(getActivity(),"groups",MainActivity.groups);
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton("취소하기" , new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
+                GroupManageFragment Gdialog = new GroupManageFragment();
+                Gdialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
+                Gdialog.show(getFragmentManager(),"GroupManageFragment");
             }
         });
 
@@ -124,7 +108,7 @@ public class ContactsFragment extends Fragment {
                                 Cdialog.show(getFragmentManager(),"ContactsInfoDialogFragment");
                                 break;
                             case "데이터 제거":
-                                AlertDialog.Builder removeBuilder = new AlertDialog.Builder(getActivity());
+                                AlertDialog.Builder removeBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
                                 removeBuilder.setTitle("Remove");
                                 removeBuilder.setMessage("If you select OK button, All data will be deleted. Please select carefully.");
                                 removeBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

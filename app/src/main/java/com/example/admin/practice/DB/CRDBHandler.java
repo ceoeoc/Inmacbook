@@ -7,7 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.admin.practice.ContactRecord;
-import com.example.admin.practice.ContactsItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,9 @@ public class CRDBHandler {
         ContentValues cv = new ContentValues();
         cv.put(CRDBHelper.ColId, con.get_id());
         cv.put(CRDBHelper.ColLM, con.getLastmeet());
+        cv.put(CRDBHelper.ColLC, con.getLastcall());
         cv.put(CRDBHelper.ColTM, con.getTotalmeet());
+        cv.put(CRDBHelper.ColTC, con.getTotalcall());
         cv.put(CRDBHelper.ColTT, con.getTotal());
 
         long i = db.insert(CRDBHelper.TBName,null, cv);
@@ -46,7 +47,9 @@ public class CRDBHandler {
         ContentValues cv = new ContentValues();
         cv.put(CRDBHelper.ColId, con.get_id());
         cv.put(CRDBHelper.ColLM, con.getLastmeet());
+        cv.put(CRDBHelper.ColLC, con.getLastcall());
         cv.put(CRDBHelper.ColTM, con.getTotalmeet());
+        cv.put(CRDBHelper.ColTC, con.getTotalcall());
         cv.put(CRDBHelper.ColTT, con.getTotal());
 
         db.update(CRDBHelper.TBName,cv, CRDBHelper.ColId + " = " + "'" + con.get_id() + "'", null);
@@ -62,8 +65,10 @@ public class CRDBHandler {
         curs.moveToFirst();
         c.set_id(curs.getString(0));
         c.setLastmeet(curs.getLong(1));
-        c.setTotalmeet(curs.getLong(2));
-        c.setTotal(curs.getLong(3));
+        c.setLastcall(curs.getLong(2));
+        c.setTotalmeet(curs.getLong(3));
+        c.setTotalcall(curs.getLong(4));
+        c.setTotal(curs.getLong(5));
         curs.close();
         return c;
     }
@@ -89,8 +94,10 @@ public class CRDBHandler {
 
         c.set_id(curs.getString(0));
         c.setLastmeet(curs.getLong(1));
-        c.setTotalmeet(curs.getLong(2));
-        c.setTotal(curs.getLong(3));
+        c.setLastcall(curs.getLong(2));
+        c.setTotalmeet(curs.getLong(3));
+        c.setTotalcall(curs.getLong(4));
+        c.setTotal(curs.getLong(5));
         return c;
     }
 }

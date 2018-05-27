@@ -13,16 +13,20 @@ public class CRDBHelper extends SQLiteOpenHelper{
     public static String TBName = "ContactRecord";
 
     public static String ColId = "cid";
-    public static String ColLM = "LM";
-    public static String ColTM = "TM";
-    public static String ColTT = "TT";
+    public static String ColLM = "lm";
+    public static String ColLC = "lc";
+    public static String ColTM = "tm";
+    public static String ColTC = "tc";
+    public static String ColTT = "tt";
 
     // public static String ColPhoto = "photo";
 
     public static String create =
             "CREATE TABLE " + TBName + " ( " + ColId + " text primary key, "
-                    + ColLM + " integer not null, "
+                    + ColLM + " integer , "
+                    + ColLC + " integer ,"
                     + ColTM + " integer not null, "
+                    + ColTC + " integer not null, "
                     + ColTT + " integer not null);";
 
     public CRDBHelper(Context context){

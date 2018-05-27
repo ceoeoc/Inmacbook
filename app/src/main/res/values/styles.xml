@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyAlterDialogStyle" parent="Theme.AppCompat.DayNight.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -32,6 +36,7 @@
         <item name="android:textColorPrimary">@color/colorAccent</item>
         <item name="android:textColorSecondary">@color/colorAccent</item>
     </style>
+
     <style name="MenuLabelsStyle">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">#FFFFFF</item>

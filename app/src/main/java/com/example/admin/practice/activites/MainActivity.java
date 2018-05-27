@@ -41,9 +41,11 @@ import android.view.MenuItem;
 
 import android.widget.Toast;
 
+import com.example.admin.practice.ContactRecord;
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DB.CIDBHandler;
-import com.example.admin.practice.DB.DB_Manager;
+import com.example.admin.practice.DB.CRDBHandler;
+import com.example.admin.practice.DB.WebDBManager;
 import com.example.admin.practice.PermissionUtil;
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
@@ -56,6 +58,8 @@ import com.wafflecopter.multicontactpicker.MultiContactPicker;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private CIDBHandler dh = null;
+    private CIDBHandler Cdh = null;
+    private CRDBHandler Rdh = null;
     private FragmentManager frgM;
     private Fragment frg = null;
     private FloatingActionButton fab;
@@ -146,6 +151,34 @@ public class MainActivity extends AppCompatActivity {
         builder.create();
     }
 
+    private String getBluetoothMacAddress() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        String bluetoothMacAddress = "";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M){
+            try {
+                Field mServiceField = bluetoothAdapter.getClass().getDeclaredField("mService");
+                mServiceField.setAccessible(true);
+
+                Object btManagerService = mServiceField.get(bluetoothAdapter);
+
+                if (btManagerService != null) {
+                    bluetoothMacAddress = (String) btManagerService.getClass().getMethod("getAddress").invoke(btManagerService);
+                }
+            } catch (NoSuchFieldException e) {
+
+            } catch (NoSuchMethodException e) {
+
+            } catch (IllegalAccessException e) {
+
+            } catch (InvocationTargetException e) {
+
+            }
+        } else {
+            bluetoothMacAddress = bluetoothAdapter.getAddress();
+        }
+        return bluetoothMacAddress;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,11 +200,11 @@ public class MainActivity extends AppCompatActivity {
         groups = new ArrayList<String>();
         if(groups.addAll( getStringArrayPref(this,"groups"))){
 
-        }else{
-            groups.add("정의 되지 않음");
         }
-        dh = new CIDBHandler(this);
-        dh.open();
+        Cdh = new CIDBHandler(this);
+        Cdh.open();
+        Rdh = new CRDBHandler(this);
+        Rdh.open();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -210,8 +243,8 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy//MM/dd HH:mm:ss");
                 String str_datetime = sdfNow.format(date);
                 TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                DB_Manager db_manager;
-                db_manager = new DB_Manager();
+                WebDBManager webDb_manager;
+                webDb_manager = new WebDBManager();
                 String PhoneNum = "";
                 try {
                     PhoneNum = telManager.getLine1Number();
@@ -223,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 String str_latitude = String.valueOf(LAT);
                 String str_longitude = String.valueOf(LNG);
                 Log.d("aaa", LAT + "  " + LNG + "onCreate: ");
-                db_manager.information(str_web_id, str_datetime, str_latitude, str_longitude);
+                webDb_manager.information(str_web_id, str_datetime, str_latitude, str_longitude);
 
                 this.sendEmptyMessageDelayed(0, 30000);
 
@@ -255,9 +288,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("fab", "inContact_picker+request");
                 List<ContactResult> results = MultiContactPicker.obtainResult(data);
                 ContactsItem ci = new ContactsItem();
+                ContactRecord cr = new ContactRecord();
                 for (int i = 0; i < results.size(); i++) {
                     ci.set_id(results.get(i).getContactID());
-                    if(!dh.isExist(ci.get_id())){
+                    if(!Cdh.isExist(ci.get_id())){
+                        cr.set_id(ci.get_id());
+                        cr.setTotalcall(0);
+                        cr.setTotalmeet(0);
+                        cr.setTotal(0);
                         ci.setName(results.get(i).getDisplayName());
                         ci.setPhone(results.get(i).getPhoneNumbers().get(0));
                         ci.setFeat("unknown");
@@ -265,12 +303,13 @@ public class MainActivity extends AppCompatActivity {
                         ci.setLevel(0);
                         ci.setGroup("unknown");
                         ci.setBluth("unknown");
-                        dh.insert(ci);
+                        Cdh.insert(ci);
+                        Rdh.insert(cr);
                     }else{
-                        ci = dh.getData(ci.get_id());
+                        ci = Cdh.getData(ci.get_id());
                         ci.setName(results.get(i).getDisplayName());
                         ci.setPhone(results.get(i).getPhoneNumbers().get(0));
-                        dh.update(ci);
+                        Cdh.update(ci);
                     }
                 }
             } else if(resultCode == RESULT_CANCELED){

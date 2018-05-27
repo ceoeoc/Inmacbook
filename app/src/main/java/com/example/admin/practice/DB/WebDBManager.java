@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
  * Created by Tuna on 2018-05-07.
  */
 
-public class DB_Manager {
+public class WebDBManager {
     private String urlPath;
     private final String information_urlPath ="http://13.125.52.147/information.php";
     private String str_web_id;

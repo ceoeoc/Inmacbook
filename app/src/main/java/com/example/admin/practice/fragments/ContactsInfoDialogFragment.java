@@ -1,7 +1,9 @@
 package com.example.admin.practice.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.DialogFragment;
@@ -13,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DB.CIDBHandler;
@@ -34,10 +37,9 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     private ContactsItem mitem;
 
     private List<LogObject> callLogs;
-    private InputMethodManager imm;
     private ImageButton oB,cB;
-    private ImageView eN,eP;
-    private EditText name, phone;
+    private ImageButton eN,eP;
+    private TextView name, phone;
     private MaterialSpinner gsp;
     private String mcid;
     private String selectedGroup;
@@ -62,40 +64,65 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.contacts_info, container, false);
-        imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         dh = new CIDBHandler(getActivity());
         dh.open();
         mitem = dh.getData(mcid);
 
-        name = (EditText) rootView.findViewById(R.id.name);
+        name = (TextView) rootView.findViewById(R.id.name);
         name.setText(mitem.getName());
-        name.setClickable(false);
-        name.setFocusable(false);
-        eN = (ImageView) rootView.findViewById(R.id.ed_name);
+        eN = (ImageButton) rootView.findViewById(R.id.ed_name);
         eN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name.setFocusableInTouchMode(true);
-                name.setClickable(true);
-                name.setFocusable(true);
-                imm.showSoftInput(name,0);
-                oB.setEnabled(true);
+                final EditText et = new EditText(getActivity());
+                et.setHint(mitem.getName());
+                AlertDialog.Builder EditBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
+                EditBuilder.setTitle("이름 수정");
+                EditBuilder.setMessage("바꿀 이름을 적어주세요.");
+                EditBuilder.setView(et);
+                EditBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mitem.setName(et.getText().toString());
+                                name.setText(et.getText().toString());
+                            }
+                        });
+                EditBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                EditBuilder.show();
             }
         });
-        phone = (EditText) rootView.findViewById(R.id.phone);
+        phone = (TextView) rootView.findViewById(R.id.phone);
         phone.setText(mitem.getPhone());
-        phone.setClickable(false);
-        phone.setFocusable(false);
-        eP = (ImageView) rootView.findViewById(R.id.ed_phone);
+        eP = (ImageButton) rootView.findViewById(R.id.ed_phone);
         eP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                phone.setFocusableInTouchMode(true);
-                phone.setClickable(true);
-                phone.setFocusable(true);
-                imm.showSoftInput(phone,0);
-                oB.setEnabled(true);
+                final EditText et = new EditText(getActivity());
+                et.setHint(mitem.getPhone());
+                AlertDialog.Builder EditBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
+                EditBuilder.setTitle("번호 수정");
+                EditBuilder.setMessage("바꿀 번호을 적어주세요.");
+                EditBuilder.setView(et);
+                EditBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mitem.setPhone(et.getText().toString());
+                                phone.setText(et.getText().toString());
+                            }
+                        });
+                EditBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                EditBuilder.show();
             }
         });
 
@@ -123,8 +150,6 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         oB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mitem.setName(name.getText().toString());
-                mitem.setPhone(phone.getText().toString());
                 if(!selectedGroup.isEmpty()){
                     mitem.setGroup(selectedGroup);
                 }

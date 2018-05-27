@@ -227,7 +227,7 @@ public class LogsManager {
             dh.open();
         }
         List<ContactsItem> lists;
-        lists = dh.getData();
+        lists = dh.getData(0);
         String temp;
         switch (callType) {
             case INCOMING_CALLS:

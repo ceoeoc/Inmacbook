@@ -32,6 +32,7 @@ public class CIDBHandler {
         if(curs.getCount()== 0) return false;
         return true;
     }
+    
 
     public long insert(ContactsItem con) {
         ContentValues cv = new ContentValues();
@@ -83,13 +84,25 @@ public class CIDBHandler {
         curs.close();
         return c;
     }
-    public List<ContactsItem> getData(){
+
+    public List<ContactsItem> getData(int order){
         ContactsItem c;
         List<ContactsItem> con = new ArrayList<ContactsItem>();
-
-        Cursor curs = db.query(CIDBHelper.TBName, null
-                ,null,null,null,null, CIDBHelper.ColName + " asc ",null);
-
+        Cursor curs = null;
+        switch (order) {
+            case 0:
+                curs = db.query(CIDBHelper.TBName, null
+                        , null, null, null, null, CIDBHelper.ColName + " asc ", null);
+                break;
+            case 1:
+                curs = db.query(CIDBHelper.TBName, null
+                        , null, null, null, null, CIDBHelper.ColGroup + " asc ", null);
+                break;
+            default:
+                curs = db.query(CIDBHelper.TBName, null
+                        , null, null, null, null, CIDBHelper.ColName + " asc ", null);
+                break;
+        }
         curs.moveToFirst();
         while(!curs.isAfterLast()){
             c = cursorToContact(curs);
