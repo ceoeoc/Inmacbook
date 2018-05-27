@@ -85,6 +85,7 @@ public class CIDBHandler {
         return c;
     }
 
+    //order 0 : Name asc, 1 : group asc;
     public List<ContactsItem> getData(int order){
         ContactsItem c;
         List<ContactsItem> con = new ArrayList<ContactsItem>();
@@ -128,6 +129,7 @@ public class CIDBHandler {
         return c;
     }
 
+    //args : 찾을 이름, which : 0 (group)
     public int sizeofData(String args, int which){
         int ret = 0;
 

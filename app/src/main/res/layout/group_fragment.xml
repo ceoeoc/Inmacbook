@@ -33,10 +33,22 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+    <ListView
+        android:id = "@+id/grouplist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:divider="#000000"
+        android:dividerHeight="1dp"
+        android:paddingBottom="60dp">
+    </ListView>
 
+    <Button
+        android:id="@+id/bt_newgroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
+        android:text="새 그룹 추가하기" />
 
 </LinearLayout>

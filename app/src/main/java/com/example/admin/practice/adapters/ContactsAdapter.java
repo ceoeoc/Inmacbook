@@ -8,27 +8,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.admin.practice.ContactsItem;
+import com.example.admin.practice.DB.CIDBHandler;
 import com.example.admin.practice.ListViewItem;
 import com.example.admin.practice.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class ContactsAdapter extends BaseAdapter {
-
     private static final int ITEM_TITLE = 0;
     private static final int ITEM_GROUP = 1;
     private static final int ITEM_CONTACT = 2;
     private static final int ITEM_TYPE_MAX = 3;
 
     private ArrayList<ListViewItem> listViewItems = new ArrayList<>();
-    private ArrayList<ContactsItem> mItems = new ArrayList<>();
-    private ArrayList<String> groups = new ArrayList<>();
 
     @Override
     public int getViewTypeCount(){
@@ -42,12 +43,12 @@ public class ContactsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mItems.size();
+        return listViewItems.size();
     }
 
     @Override
-    public ContactsItem getItem(int position) {
-        return mItems.get(position);
+    public ListViewItem getItem(int position) {
+        return listViewItems.get(position);
     }
 
     @Override
@@ -60,26 +61,43 @@ public class ContactsAdapter extends BaseAdapter {
 
         Context context = parent.getContext();
         int viewType = getItemViewType(position);
+        ListViewItem listViewItem = listViewItems.get(position);
+        switch (viewType) {
 
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            ListViewItem listViewItem = listViewItems.get(position);
-            //아이템별로 스위치 나누고 스위치별로 레이아웃 따로 만들어서 설정해줄것
-            switch (viewType) {
-                case ITEM_TITLE:
-                convertView = inflater.inflate(R.layout.contacts_list, parent, false);
-            }
+            case ITEM_TITLE:
+                if (convertView == null) {
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = inflater.inflate(R.layout.subtitle, parent, false);
+                    TextView tv_title = (TextView) convertView.findViewById(R.id.subtitle);
+                    tv_title.setText(listViewItem.getTitleStr());
+                }
+                break;
+            case ITEM_GROUP:
+                if (convertView == null) {
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = inflater.inflate(R.layout.group_list, parent, false);
+                    TextView tv_gn = (TextView) convertView.findViewById(R.id.groupname);
+                    TextView tv_sz = (TextView) convertView.findViewById(R.id.groupnumber);1q
+                    tv_gn.setText(listViewItem.getTitleStr());
+                    tv_sz.setText("" + listViewItem.getSz());
+                }
+                break;
+            case ITEM_CONTACT:
+                if (convertView == null) {
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = inflater.inflate(R.layout.contacts_list, parent, false);
+                    TextView m_TextView = (TextView) convertView.findViewById(R.id.tv_name);
+                    ProgressBar m_Pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
+                    m_TextView.setText(listViewItem.getCi().getName());
+                    m_Pgb.setProgress(listViewItem.getCi().getPoint());
+                }else{
+                    TextView m_TextView = (TextView) convertView.findViewById(R.id.tv_name);
+                    ProgressBar m_Pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
+                    m_TextView.setText(listViewItem.getCi().getName());
+                    m_Pgb.setProgress(listViewItem.getCi().getPoint());
+                }
+            break;
         }
-
-        TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-        ProgressBar pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
-        ImageView iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
-
-        ContactsItem myItem = getItem(position);
-
-        tv_name.setText(myItem.getName());
-        pgb.setProgress(myItem.getPoint());
 
         return convertView;
     }
@@ -89,8 +107,29 @@ public class ContactsAdapter extends BaseAdapter {
         return bm;
     }
 
-    public void addItem(ContactsItem mItem) {
-        mItems.add(mItem);
+    public void addItem(int type, int sz, String str, ContactsItem ci){
+        ListViewItem item = new ListViewItem();
+        switch(type) {
+            case ITEM_TITLE:
+                item.setType(ITEM_TITLE);
+                item.setStr(str);
+                break;
+            case ITEM_GROUP:
+                item.setType(ITEM_GROUP);
+                item.setSz(sz);
+                item.setStr(str);
+
+                break;
+            case ITEM_CONTACT:
+                item.setType(ITEM_CONTACT);
+                item.setCi(ci);
+                break;
+        }
+
+        listViewItems.add(item);
     }
-    public void addItem(String groupname){ groups.add(groupname);}
+
+    public void clear(){
+        listViewItems.clear();
+    }
 }

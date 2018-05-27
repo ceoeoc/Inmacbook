@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DB.CIDBHandler;
+import com.example.admin.practice.ListViewItem;
 import com.example.admin.practice.activites.MainActivity;
 import com.example.admin.practice.adapters.ContactsAdapter;
 import com.example.admin.practice.R;
@@ -46,15 +47,19 @@ public class ContactsFragment extends Fragment {
 
         dh = new CIDBHandler(getActivity());
         dh.open();
-        int orderby = 1;
-        lists = dh.getData(orderby);
 
-        for(int i = 0 ; i < lists.size() ; i++){
-
-            mAdapter.addItem(lists.get(i));
-        }
+        mAdapter.clear();
         mListView.setAdapter(mAdapter);
-
+        lists = dh.getData(0);
+        mAdapter.addItem(0,0,"즐겨찾기",null);
+        mAdapter.addItem(0,0,"그룹",null);
+        for(int i = 0 ; i < MainActivity.groups.size();i++){
+            mAdapter.addItem(1,dh.sizeofData(MainActivity.groups.get(i),0),MainActivity.groups.get(i),null);
+        }
+        mAdapter.addItem(0,0,"목록",null);
+        for(int i = 0 ; i < lists.size() ; i++){
+            mAdapter.addItem(2,0,null,lists.get(i));
+        }
         cfab = (FloatingActionButton) rootView.findViewById(R.id.cafab);
         cfab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +90,7 @@ public class ContactsFragment extends Fragment {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedContacts = lists.get(position);
+                selectedContacts = lists.get(position-MainActivity.groups.size()-3);
                 final List<String> listitems = new ArrayList<>();
                 listitems.add("즐겨찾기");
                 listitems.add("자세히 보기");
@@ -115,7 +120,9 @@ public class ContactsFragment extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dh.delete(selectedContacts.get_id());
-                                        Refresh();
+                                        mAdapter.notifyDataSetChanged();
+                                        mListView.setAdapter(mAdapter);
+                                        //Refresh();
                                         Toast.makeText(getActivity(),"Deleted Data", Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -130,7 +137,9 @@ public class ContactsFragment extends Fragment {
                             case "호감도 올리기":
                                 selectedContacts.setPoint(selectedContacts.getPoint() + 10);
                                 dh.update(selectedContacts);
-                                Refresh();
+                                mAdapter.notifyDataSetChanged();
+                                mListView.setAdapter(mAdapter);
+                                //Refresh();
                                 break;
                             default:
                                 break;
