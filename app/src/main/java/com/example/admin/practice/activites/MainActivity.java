@@ -58,6 +58,7 @@ import com.wafflecopter.multicontactpicker.MultiContactPicker;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
@@ -216,6 +217,13 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        //추가된 아이들 핸드폰 번호 리스트
+        List<String> phonelist = Cdh.getPhoneListNoBluth();
+
+        for(int i = 0 ; i < phonelist.size(); i++){
+            Log.d("v", "phonelist no bluth : " + phonelist.get(i));
+        }
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -463,5 +471,4 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
     }
-
-}
+    }

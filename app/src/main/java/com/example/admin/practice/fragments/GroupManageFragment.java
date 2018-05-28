@@ -1,14 +1,17 @@
 package com.example.admin.practice.fragments;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.DialogFragment;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.admin.practice.DB.CIDBHandler;
 import com.example.admin.practice.R;
@@ -26,7 +29,6 @@ public class GroupManageFragment extends DialogFragment {
     private ListView mListView;
     private ContactsAdapter mAdapter;
 
-    private ArrayList<String> groups;
     private CIDBHandler Cdh;
 
     @Override
@@ -67,7 +69,30 @@ public class GroupManageFragment extends DialogFragment {
         nG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog.Builder addBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
+                final EditText et = new EditText(getActivity());
+                et.setHint("그룹 이름을 입력해 주세요.");
+                addBuilder.setTitle("그룹 추가하기");
+                addBuilder.setView(et);
+                addBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newgroup = et.getText().toString();
+                        MainActivity.groups.add(newgroup);
+                        MainActivity.setStringArrayPref(getActivity(),"groups",MainActivity.groups);
+                        AddPeople Adialog = AddPeople.newInstance(newgroup);
+                        Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
+                        Adialog.show(getActivity().getFragmentManager(),"AddPeopleFragment");
 
+                        dismiss();
+                    }
+                });
+                addBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                addBuilder.show();
             }
         });
         return rootView;

@@ -85,8 +85,24 @@ public class CIDBHandler {
         return c;
     }
 
-    //order 0 : Name asc, 1 : group asc;
-    public List<ContactsItem> getData(int order){
+    public List<String> getPhoneListNoBluth(){
+        List<String> ret = new ArrayList<>();
+        ContactsItem c;
+
+        Cursor curs = db.query(CIDBHelper.TBName, null
+                , CIDBHelper.ColBluth + " = " + "'unknown'", null, null, null, null, null);
+        curs.moveToFirst();
+        while(!curs.isAfterLast()){
+            c = cursorToContact(curs);
+            ret.add(c.getPhone());
+            curs.moveToNext();
+        }
+        curs.close();
+        return ret;
+    }
+
+
+    public List<ContactsItem> getData(int order){//order 0 : Name asc, 1 : group asc;
         ContactsItem c;
         List<ContactsItem> con = new ArrayList<ContactsItem>();
         Cursor curs = null;
@@ -104,6 +120,23 @@ public class CIDBHandler {
                         , null, null, null, null, CIDBHelper.ColName + " asc ", null);
                 break;
         }
+        curs.moveToFirst();
+        while(!curs.isAfterLast()){
+            c = cursorToContact(curs);
+            con.add(c);
+            curs.moveToNext();
+        }
+        curs.close();
+        return con;
+    }
+
+
+    public List<ContactsItem> getGroupData(String args){//order 0 : Name asc, 1 : group asc;
+        ContactsItem c;
+        List<ContactsItem> con = new ArrayList<ContactsItem>();
+        Cursor curs = curs = db.query(CIDBHelper.TBName, null
+                , CIDBHelper.ColGroup + " = " + "'" + args+ "'", null, null, null, null, null);;
+
         curs.moveToFirst();
         while(!curs.isAfterLast()){
             c = cursorToContact(curs);

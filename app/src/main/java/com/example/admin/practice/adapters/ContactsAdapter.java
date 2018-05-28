@@ -53,7 +53,7 @@ public class ContactsAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ContactsAdapter extends BaseAdapter {
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     convertView = inflater.inflate(R.layout.group_list, parent, false);
                     TextView tv_gn = (TextView) convertView.findViewById(R.id.groupname);
-                    TextView tv_sz = (TextView) convertView.findViewById(R.id.groupnumber);1q
+                    TextView tv_sz = (TextView) convertView.findViewById(R.id.groupnumber);
                     tv_gn.setText(listViewItem.getTitleStr());
                     tv_sz.setText("" + listViewItem.getSz());
                 }
