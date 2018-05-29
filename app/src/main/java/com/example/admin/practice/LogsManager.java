@@ -253,7 +253,7 @@ public class LogsManager {
             selection = temp + " and " + CallLog.Calls.NUMBER + " = " + "'" + tmpCi.getPhone() + "'";
 
             Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, null, null);
-
+            if(cursor.getCount() == 0) continue;
             groups.put(tmpCi.getGroup(),groups.get(tmpCi.getGroup()) + cursor.getCount());
             cursor.close();
         }

@@ -6,13 +6,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,9 +31,9 @@ public class ContactsFragment extends Fragment {
 
     private CIDBHandler dh;
     private ListView mListView;
-    private List<ContactsItem> lists;
+    private ArrayList<ListViewItem> listViewItemList = new ArrayList<>();
     private ContactsAdapter mAdapter;
-    private ContactsItem selectedContacts;
+    private ListViewItem selectedItem;
     private FloatingActionButton cfab,gfab;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,16 +48,25 @@ public class ContactsFragment extends Fragment {
 
         mAdapter.clear();
         mListView.setAdapter(mAdapter);
-        lists = dh.getData(0);
-        mAdapter.addItem(0,0,"즐겨찾기",null);
-        mAdapter.addItem(0,0,"그룹",null);
+        List<ContactsItem> lists = dh.getData(0);
+
+        listViewItemList.add(new ListViewItem(0,"즐겨찾기"));
+        listViewItemList.add(new ListViewItem(0,"그룹"));
         for(int i = 0 ; i < MainActivity.groups.size();i++){
-            mAdapter.addItem(1,dh.sizeofData(MainActivity.groups.get(i),0),MainActivity.groups.get(i),null);
+            listViewItemList.add(new ListViewItem(1,dh.sizeofData(MainActivity.groups.get(i),0),MainActivity.groups.get(i)));
         }
+        listViewItemList.add(new ListViewItem(0,"목록"));
+        for(int i = 0 ; i < lists.size();i++){
+            listViewItemList.add(new ListViewItem(2,lists.get(i)));
+        }
+        mAdapter.addItem(listViewItemList);
+        /*mAdapter.addItem(0,0,"즐겨찾기",null);
+        mAdapter.addItem(0,0,"그룹",null);
+        mAdapter.addItem(1,dh.sizeofData(MainActivity.groups.get(i),0),MainActivity.groups.get(i),null));
         mAdapter.addItem(0,0,"목록",null);
         for(int i = 0 ; i < lists.size() ; i++){
             mAdapter.addItem(2,0,null,lists.get(i));
-        }
+        }*/
         cfab = (FloatingActionButton) rootView.findViewById(R.id.cafab);
         cfab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,77 +94,81 @@ public class ContactsFragment extends Fragment {
             }
         });
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(),"ClickItem at " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedContacts = lists.get(position-MainActivity.groups.size()-3);
-                final List<String> listitems = new ArrayList<>();
-                listitems.add("즐겨찾기");
-                listitems.add("자세히 보기");
-                listitems.add("데이터 제거");
-                listitems.add("호감도 올리기");
-                final CharSequence[] items = listitems.toArray(new String[listitems.size()]);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(selectedContacts.getName());
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String selectedText = items[which].toString();
-                        switch(selectedText){
-                            case "즐겨찾기":
-                                Toast.makeText(getActivity(),"Add to Favorite list", Toast.LENGTH_SHORT).show();
-                                break;
-                            case "자세히 보기":
-                                ContactsInfoDialogFragment Cdialog = ContactsInfoDialogFragment.newInstance(selectedContacts.get_id());
-                                Cdialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
-                                Cdialog.show(getFragmentManager(),"ContactsInfoDialogFragment");
-                                break;
-                            case "데이터 제거":
-                                AlertDialog.Builder removeBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
-                                removeBuilder.setTitle("Remove");
-                                removeBuilder.setMessage("If you select OK button, All data will be deleted. Please select carefully.");
-                                removeBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dh.delete(selectedContacts.get_id());
-                                        mAdapter.notifyDataSetChanged();
-                                        mListView.setAdapter(mAdapter);
-                                        //Refresh();
-                                        Toast.makeText(getActivity(),"Deleted Data", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                removeBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(getActivity(),"Canceled remove", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                removeBuilder.show();
-                                break;
-                            case "호감도 올리기":
-                                selectedContacts.setPoint(selectedContacts.getPoint() + 10);
-                                dh.update(selectedContacts);
-                                mAdapter.notifyDataSetChanged();
-                                mListView.setAdapter(mAdapter);
-                                //Refresh();
-                                break;
-                            default:
-                                break;
+                selectedItem = listViewItemList.get(position);
+                if(selectedItem.getType() == 1) {
+                    Toast.makeText(getActivity(),"ClickItem at " + position, Toast.LENGTH_SHORT).show();
+                }else if (selectedItem.getType() == 2) {
+                    final List<String> listitems = new ArrayList<>();
+                    listitems.add("즐겨찾기");
+                    listitems.add("자세히 보기");
+                    listitems.add("데이터 제거");
+                    listitems.add("호감도 올리기");
+                    final CharSequence[] items = listitems.toArray(new String[listitems.size()]);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(selectedItem.getCi().getName());
+                    builder.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String selectedText = items[which].toString();
+                            switch (selectedText) {
+                                case "즐겨찾기":
+                                    Toast.makeText(getActivity(), "Add to Favorite list", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case "자세히 보기":
+                                    ContactsInfoDialogFragment Cdialog = ContactsInfoDialogFragment.newInstance(selectedItem.getCi().get_id());
+                                    Cdialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
+                                    Cdialog.show(getFragmentManager(), "ContactsInfoDialogFragment");
+                                    break;
+                                case "데이터 제거":
+                                    AlertDialog.Builder removeBuilder = new AlertDialog.Builder(getActivity(), R.style.MyAlterDialogStyle);
+                                    removeBuilder.setTitle("Remove");
+                                    removeBuilder.setMessage("If you select OK button, All data will be deleted. Please select carefully.");
+                                    removeBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dh.delete(selectedItem.getCi().get_id());
+                                            mAdapter.notifyDataSetChanged();
+                                            mListView.setAdapter(mAdapter);
+                                            Toast.makeText(getActivity(), "Deleted Data", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    removeBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Toast.makeText(getActivity(), "Canceled remove", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    removeBuilder.show();
+                                    break;
+                                case "호감도 올리기":
+                                    selectedItem.getCi().setPoint(selectedItem.getCi().getPoint() + 10);
+                                    dh.update(selectedItem.getCi());
+                                    mAdapter.notifyDataSetChanged();
+                                    mListView.setAdapter(mAdapter);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
-                    }
-                });
-                builder.show();
+                    });
+                    builder.show();
 
+                }
                 return false;
+
             }
         });
 
         return rootView;
-    }
-
-    public void Refresh(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
     }
 
 

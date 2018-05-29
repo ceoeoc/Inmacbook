@@ -7,12 +7,15 @@ import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DB.CIDBHandler;
@@ -22,6 +25,7 @@ import com.example.admin.practice.R;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ContactsAdapter extends BaseAdapter {
     private static final int ITEM_TITLE = 0;
@@ -59,7 +63,7 @@ public class ContactsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Context context = parent.getContext();
+        final Context context = parent.getContext();
         int viewType = getItemViewType(position);
         ListViewItem listViewItem = listViewItems.get(position);
         switch (viewType) {
@@ -71,6 +75,7 @@ public class ContactsAdapter extends BaseAdapter {
                     TextView tv_title = (TextView) convertView.findViewById(R.id.subtitle);
                     tv_title.setText(listViewItem.getTitleStr());
                 }
+
                 break;
             case ITEM_GROUP:
                 if (convertView == null) {
@@ -81,6 +86,7 @@ public class ContactsAdapter extends BaseAdapter {
                     tv_gn.setText(listViewItem.getTitleStr());
                     tv_sz.setText("" + listViewItem.getSz());
                 }
+
                 break;
             case ITEM_CONTACT:
                 if (convertView == null) {
@@ -106,7 +112,11 @@ public class ContactsAdapter extends BaseAdapter {
         Bitmap bm = BitmapFactory.decodeByteArray(b,0,b.length);
         return bm;
     }
-
+    public void addItem(List<ListViewItem> list){
+        for(int i = 0 ; i < list.size();i++){
+            listViewItems.add(list.get(i));
+        }
+    }
     public void addItem(int type, int sz, String str, ContactsItem ci){
         ListViewItem item = new ListViewItem();
         switch(type) {

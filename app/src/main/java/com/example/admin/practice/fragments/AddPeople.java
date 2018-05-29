@@ -2,6 +2,7 @@ package com.example.admin.practice.fragments;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +64,6 @@ public class AddPeople extends DialogFragment {
             public void onClick(View v) {
                 SparseBooleanArray checkedItems = mListView.getCheckedItemPositions();
                 int count = mAdapter.getCount();
-
                 for(int i = count - 1 ; i >= 0 ; i--){
                     if(checkedItems.get(i)){
                         lists.get(i).setGroup(args1);

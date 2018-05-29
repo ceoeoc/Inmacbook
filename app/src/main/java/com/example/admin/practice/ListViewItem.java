@@ -8,6 +8,21 @@ public class ListViewItem {
 
     private ContactsItem ci;
     public ListViewItem(){}
+    public ListViewItem(int type,String str){
+        this.type = type;
+        this.str = str;
+    }
+
+    public ListViewItem(int type,int sz, String Str){
+        this.type = type;
+        this.sz = sz;
+        this.str = Str;
+    }
+
+    public ListViewItem(int type,ContactsItem ci){
+        this.type = type;
+        this.ci = ci;
+    }
 
     public void setType(int type){
         this.type = type;

@@ -21,16 +21,6 @@
             android:background="@color/colorPrimary"
             android:src="@drawable/ic_back" />
 
-        <ImageButton
-            android:id="@+id/confrim"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:theme="@style/AccentButton"
-            android:src="@drawable/ic_ok"
-            style="@style/Widget.AppCompat.Button.Colored"/>
-
     </LinearLayout>
 
     <ListView
@@ -40,7 +30,8 @@
         android:layout_weight="1"
         android:divider="#000000"
         android:dividerHeight="1dp"
-        android:paddingBottom="60dp">
+        android:paddingBottom="60dp"
+        android:focusable="false">
     </ListView>
 
     <Button
