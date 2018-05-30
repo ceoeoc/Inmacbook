@@ -12,8 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.example.admin.practice.DBHandler;
-import com.example.admin.practice.LogObject;
+import com.example.admin.practice.DB.CIDBHandler;
 import com.example.admin.practice.LogsManager;
 import com.example.admin.practice.R;
 
@@ -23,7 +22,7 @@ import java.util.HashMap;
 public class StaticsFragment extends Fragment {
     int num1,num2,num3,num4,num5,size;
 
-    private DBHandler dh;
+    private CIDBHandler dh;
     private Spinner spinner;
     private WebView webView;
     @Override
@@ -34,7 +33,7 @@ public class StaticsFragment extends Fragment {
         spinner = (Spinner) rootView.findViewById(R.id.staticspinner);
         setSpinner();
 
-        dh = new DBHandler(getActivity());
+        dh = new CIDBHandler(getActivity());
         dh.open();
         WebSettings webSettings = webView.getSettings();
         webView.addJavascriptInterface(new WebAppInterface(),"Android");

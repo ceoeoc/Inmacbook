@@ -1,25 +1,24 @@
 package com.example.admin.practice.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.DialogFragment;
-<<<<<<< HEAD
-
-import android.util.TypedValue;
-
-=======
->>>>>>> 62af33d669010af2cb52cc79f7f5204c23f0ce21
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.admin.practice.ContactsItem;
-import com.example.admin.practice.DBHandler;
+import com.example.admin.practice.DB.CIDBHandler;
 import com.example.admin.practice.LogObject;
 import com.example.admin.practice.LogsManager;
 import com.example.admin.practice.R;
@@ -34,12 +33,12 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     public static final String TAG = "ContactsInfoDialogFragment";
     private static final String Key = "ContactsInformation";
 
-    private DBHandler dh;
+    private CIDBHandler dh;
     private ContactsItem mitem;
 
     private List<LogObject> callLogs;
-    private WebView mcl;
-    private Button oB,cB;
+    private ImageButton oB,cB;
+    private ImageButton eN,eP;
     private TextView name, phone;
     private MaterialSpinner gsp;
     private String mcid;
@@ -66,14 +65,66 @@ public class ContactsInfoDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.contacts_info, container, false);
 
-        dh = new DBHandler(getActivity());
+        dh = new CIDBHandler(getActivity());
         dh.open();
         mitem = dh.getData(mcid);
 
         name = (TextView) rootView.findViewById(R.id.name);
-        phone = (TextView) rootView.findViewById(R.id.phone);
         name.setText(mitem.getName());
+        eN = (ImageButton) rootView.findViewById(R.id.ed_name);
+        eN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText et = new EditText(getActivity());
+                et.setHint(mitem.getName());
+                AlertDialog.Builder EditBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
+                EditBuilder.setTitle("이름 수정");
+                EditBuilder.setMessage("바꿀 이름을 적어주세요.");
+                EditBuilder.setView(et);
+                EditBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mitem.setName(et.getText().toString());
+                                name.setText(et.getText().toString());
+                            }
+                        });
+                EditBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                EditBuilder.show();
+            }
+        });
+        phone = (TextView) rootView.findViewById(R.id.phone);
         phone.setText(mitem.getPhone());
+        eP = (ImageButton) rootView.findViewById(R.id.ed_phone);
+        eP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText et = new EditText(getActivity());
+                et.setHint(mitem.getPhone());
+                AlertDialog.Builder EditBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
+                EditBuilder.setTitle("번호 수정");
+                EditBuilder.setMessage("바꿀 번호을 적어주세요.");
+                EditBuilder.setView(et);
+                EditBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mitem.setPhone(et.getText().toString());
+                                phone.setText(et.getText().toString());
+                            }
+                        });
+                EditBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                EditBuilder.show();
+            }
+        });
 
         gsp = (MaterialSpinner) rootView.findViewById(R.id.gspinner);
         setSpinner();
@@ -92,13 +143,13 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         LogsAdapter logsAdapter = new LogsAdapter(getActivity(),R.layout.log_layout,callLogs);
         mlv.setAdapter(logsAdapter);
 
-        oB = (Button) rootView.findViewById(R.id.confrim);
-        cB = (Button) rootView.findViewById(R.id.cancel);
+        oB = (ImageButton) rootView.findViewById(R.id.confrim);
+        oB.setEnabled(false);
+        cB = (ImageButton) rootView.findViewById(R.id.cancel);
 
         oB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mitem.setName(name.getText().toString());
                 if(!selectedGroup.isEmpty()){
                     mitem.setGroup(selectedGroup);
                 }
@@ -118,13 +169,23 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     }
 
     public void setSpinner(){
+        MainActivity.groups.add("정의 되지 않음");
         gsp.setItems(MainActivity.groups);
-
+        gsp.setSelectedIndex(MainActivity.groups.size()-1);
+        for(int i=0;i<MainActivity.groups.size();i++) {
+            if(mitem.getGroup() == MainActivity.groups.get(i)) {
+                gsp.setSelectedIndex(i);
+            }
+        }
+        MainActivity.groups.remove(MainActivity.groups.size()-1);
         gsp.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-
+                if(item != "정의 되지 않음") {
+                    selectedGroup = item;
+                    oB.setEnabled(true);
+                }
             }
         });
     }

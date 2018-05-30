@@ -9,27 +9,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:orientation="horizontal">
 
 
-        <Button
+        <ImageButton
             android:id="@+id/cancel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:text="Cancel"
-            android:textColor="@color/colorAccent" />
+            android:src="@drawable/ic_back" />
 
-        <Button
+        <ImageButton
             android:id="@+id/confrim"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:text="Confirm"
-            android:textColor="@color/colorAccent" />
+            android:theme="@style/AccentButton"
+            android:src="@drawable/ic_ok"
+            style="@style/Widget.AppCompat.Button.Colored"/>
 
     </LinearLayout>
 
@@ -56,6 +56,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/useric"
             app:srcCompat="@drawable/phone_ic" />
+
+        <ImageButton
+            android:id="@+id/ed_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/name"
+            app:layout_constraintEnd_toEndOf="@+id/name"
+            app:layout_constraintTop_toTopOf="@+id/name"
+            app:srcCompat="@drawable/ic_edit" />
+
+        <ImageButton
+            android:id="@+id/ed_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/phone"
+            app:layout_constraintEnd_toEndOf="@+id/phone"
+            app:layout_constraintTop_toTopOf="@+id/phone"
+            app:srcCompat="@drawable/ic_edit" />
 
         <ImageView
             android:id="@+id/groupic"
@@ -86,6 +112,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/notosanscjdemilight"
             android:textSize="20sp"
+            android:background="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/useric"
             app:layout_constraintTop_toTopOf="parent" />
@@ -99,19 +126,20 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/notosanscjdemilight"
             android:textSize="20sp"
+            android:background="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/phoneic"
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/gspinner"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:textAlignment="center"
             android:fontFamily="@font/notosanscjdemilight"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.531"
             app:layout_constraintStart_toEndOf="@+id/groupic"
@@ -122,11 +150,13 @@
             android:layout_height="225dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/logic"
-            app:layout_constraintTop_toBottomOf="@+id/gspinner">
+            app:layout_constraintTop_toBottomOf="@+id/gspinner"
+            app:layout_constraintVertical_bias="0.132">
 
             <ListView
                 android:id="@+id/cllv"
@@ -134,10 +164,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="0dp"
                 android:layout_weight="1"
                 android:clipToPadding="false"
-                android:divider="#000000"
+                android:divider="#2E5281"
                 android:dividerHeight="1dp"
                 android:paddingBottom="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -146,6 +176,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/gspinner" />
 
         </LinearLayout>
+
+
 
     </android.support.constraint.ConstraintLayout>
 

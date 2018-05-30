@@ -7,7 +7,8 @@ import android.provider.CallLog;
 import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
-import java.sql.Date;
+import com.example.admin.practice.DB.CIDBHandler;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class LogsManager {
     public static final int ALL_CALLS = 814;
     private static final int READ_CALL_LOG = 47;
     private Context context;
-    private DBHandler dh;
+    private CIDBHandler dh;
 
     public LogsManager(Context context) {
         this.context = context;
@@ -222,11 +223,11 @@ public class LogsManager {
     @RequiresPermission(Manifest.permission.READ_CALL_LOG)
     public HashMap<String,Integer> getLogs(HashMap<String,Integer> groups,int callType, long timelimit) {
         if(dh == null) {
-            dh = new DBHandler(context);
+            dh = new CIDBHandler(context);
             dh.open();
         }
         List<ContactsItem> lists;
-        lists = dh.getData();
+        lists = dh.getData(0);
         String temp;
         switch (callType) {
             case INCOMING_CALLS:

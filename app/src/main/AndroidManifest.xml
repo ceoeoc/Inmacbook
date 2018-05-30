@@ -30,17 +30,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activites.PreferenceActivity"
-            android:label="@string/action_settings"/>
+        <activity
+            android:name=".activites.PreferenceActivity"
+            android:label="@string/action_settings" />
         <activity android:name=".fragments.eventMake" />
         <activity android:name=".fragments.selectPerson" />
-<<<<<<< HEAD
-        <activity android:name=".EventDBHandler" />
-        <activity android:name=".EventDBHelper" />
-        <activity android:name=".SelectPosition" />
-        <activity android:name=".EventItem"></activity>
-=======
->>>>>>> 62af33d669010af2cb52cc79f7f5204c23f0ce21
+        <activity android:name=".DB.EventDBHandler" />
+        <activity android:name=".DB.EventDBHelper" />
+        <activity android:name=".ContactEvent"></activity>
     </application>
 
 </manifest>

@@ -1,32 +1,30 @@
 package com.example.admin.practice.fragments;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.util.Calendar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.admin.practice.R;
-import com.example.admin.practice.SelectPosition;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class eventMake extends AppCompatActivity {
 
     TextView TxtDate;
-    NumberPicker Picker;
+    NumberPicker NP;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_make);
-        onMeasureHour();
+        NP = (NumberPicker) findViewById(R.id.timeMeasure);
+        NP.setMinValue(0);
+        NP.setMinValue(100);
+        NP.setWrapSelectorWheel(true);
     }
 
     public void onSelectPersonClicked(View v){
@@ -74,14 +72,4 @@ public class eventMake extends AppCompatActivity {
             TxtDate.setText(String.format("%d/%d/%d", year, monthOfYear + 1, dayOfMonth));
         }
     };
-
-
-    public void onMeasureHour() {
-        Picker=(NumberPicker)findViewById(R.id.timeMeasure);
-        Picker.setMaxValue(120);
-        Picker.setMinValue(0);
-        Picker.setWrapSelectorWheel(true);
-        Picker.setValue(3);
-    }
-
 }
