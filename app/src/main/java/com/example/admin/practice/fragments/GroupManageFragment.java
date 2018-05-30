@@ -1,6 +1,8 @@
 package com.example.admin.practice.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,14 +52,10 @@ public class GroupManageFragment extends DialogFragment {
         View rootView = inflater.inflate(R.layout.group_fragment, container, false);
         Cdh = new CIDBHandler(getActivity());
         Cdh.open();
-        mAdapter = new GroupAdapter();
         mListView = (ListView) rootView.findViewById(R.id.grouplist);
 
-        mListView.setAdapter(mAdapter);
-
-        for(int i = 0 ; i < MainActivity.groups.size();i++){
-            mAdapter.addItem(1,Cdh.sizeofData(MainActivity.groups.get(i),0),MainActivity.groups.get(i),null);
-        }
+        mAdapter = new GroupAdapter();
+        setmAdapter();
 
         cB = (ImageButton) rootView.findViewById(R.id.cancel);
         cB.setOnClickListener(new View.OnClickListener() {
@@ -81,8 +79,11 @@ public class GroupManageFragment extends DialogFragment {
                         String newgroup = et.getText().toString();
                         MainActivity.groups.add(newgroup);
                         MainActivity.setStringArrayPref(getActivity(),"groups",MainActivity.groups);
+
+                        mAdapter.clear();
+                        setmAdapter();
                         mAdapter.notifyDataSetChanged();
-                        mListView.setAdapter(mAdapter);
+
                     }
                 });
                 addBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -110,11 +111,21 @@ public class GroupManageFragment extends DialogFragment {
                         String selectedText = items[which].toString();
                         switch(selectedText){
                             case "멤버 추가":
+                                FragmentManager fm = getActivity().getFragmentManager();
                                 AddPeople Adialog = AddPeople.newInstance("add",selectedgroup);
                                 Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
-                                Adialog.show(getActivity().getFragmentManager(),"AddPeopleFragment");
-                                mAdapter.notifyDataSetChanged();
-                                mListView.setAdapter(mAdapter);
+                                Adialog.show(fm,"AddPeopleFragment");
+
+                                fm.executePendingTransactions();
+                                Adialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        mAdapter.clear();
+                                        setmAdapter();
+                                        mAdapter.notifyDataSetChanged();
+                                    }
+                                });
+
                                 break;
                             case "그룹 제거":
                                 AlertDialog.Builder removeBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
@@ -126,8 +137,9 @@ public class GroupManageFragment extends DialogFragment {
                                         Cdh.deleteGroup(selectedgroup);
                                         MainActivity.groups.remove(position);
                                         MainActivity.setStringArrayPref(getActivity(),"groups",MainActivity.groups);
+                                        mAdapter.clear();
+                                        setmAdapter();
                                         mAdapter.notifyDataSetChanged();
-                                        mListView.setAdapter(mAdapter);
                                         Toast.makeText(getActivity(),"Deleted Data", Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -152,20 +164,30 @@ public class GroupManageFragment extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedgroup = MainActivity.groups.get(position);
+                FragmentManager fm = getActivity().getFragmentManager();
                 AddPeople Adialog = AddPeople.newInstance("minus",selectedgroup);
                 Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
-                Adialog.show(getActivity().getFragmentManager(),"AddPeopleFragment");
-                mAdapter.notifyDataSetChanged();
-                mListView.setAdapter(mAdapter);
+                Adialog.show(fm,"AddPeopleFragment");
+                fm.executePendingTransactions();
+                Adialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        mAdapter.clear();
+                        setmAdapter();
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
         return rootView;
     }
 
-    public void Refresh(){
-        final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.detach(this);
-        ft.attach(this);
-        ft.commit();
+    public void setmAdapter(){
+
+        mListView.setAdapter(mAdapter);
+        for(int i = 0 ; i < MainActivity.groups.size();i++){
+            mAdapter.addItem(1,Cdh.sizeofData(MainActivity.groups.get(i),0),MainActivity.groups.get(i),null);
+        }
     }
+
 }

@@ -46,6 +46,7 @@ public class ContactsFragment extends Fragment {
         dh = new CIDBHandler(getActivity());
         dh.open();
         mAdapter = new ContactsAdapter();
+        listViewItemList.clear();
         lists = dh.getData(0);
         for(int i = 0 ; i < lists.size();i++){
             listViewItemList.add(new ListViewItem(1,lists.get(i)));
@@ -87,7 +88,6 @@ public class ContactsFragment extends Fragment {
                 selectedItem = listViewItemList.get(position);
                 if (selectedItem.getType() == 1) {
                     final List<String> listitems = new ArrayList<>();
-                    //listitems.add("즐겨찾기");
                     listitems.add("자세히 보기");
                     listitems.add("데이터 제거");
                     listitems.add("호감도 올리기");
@@ -99,9 +99,6 @@ public class ContactsFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             String selectedText = items[which].toString();
                             switch (selectedText) {
-                                /*case "즐겨찾기":
-                                    Toast.makeText(getActivity(), "Add to Favorite list", Toast.LENGTH_SHORT).show();
-                                    break;*/
                                 case "자세히 보기":
                                     ContactsInfoDialogFragment Cdialog = ContactsInfoDialogFragment.newInstance(selectedItem.getCi().get_id());
                                     Cdialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);

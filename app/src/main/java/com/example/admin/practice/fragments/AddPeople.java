@@ -1,11 +1,14 @@
 package com.example.admin.practice.fragments;
 
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -22,7 +25,6 @@ public class AddPeople extends DialogFragment {
     public static final String TAG = "AddPeopleFragment";
     private static final String ARG_PARA1 = "para1";
     private static final String ARG_PARA2 = "para2";
-
 
     private AddPeopleAdapter mAdapter;
     private ListView mListView;
@@ -65,15 +67,17 @@ public class AddPeople extends DialogFragment {
         });
 
         mListView = (ListView) rootView.findViewById(R.id.listview);
-        mAdapter = new AddPeopleAdapter();
+
         switch (args1) {
             case "add":
-                mListView.setAdapter(mAdapter);
-
                 lists = Cdh.getGroupData("unknown");
+                mAdapter = new AddPeopleAdapter();
                 for (int i = 0; i < lists.size(); i++) {
                     mAdapter.addItem(lists.get(i));
                 }
+                mListView.setAdapter(mAdapter);
+                mListView.clearChoices();
+                Log.e(TAG, "mlistview초기화");
 
                 Button addbtn = (Button) rootView.findViewById(R.id.addpeoplebtn);
                 addbtn.setText("선택된 사람 추가");
@@ -82,23 +86,32 @@ public class AddPeople extends DialogFragment {
                     public void onClick(View v) {
                         SparseBooleanArray checkedItems = mListView.getCheckedItemPositions();
                         int count = mAdapter.getCount();
+                        Log.e(TAG, "onClick: " + count+ " " + args2 );
                         for (int i = count - 1; i >= 0; i--) {
                             if (checkedItems.get(i)) {
+                                Log.e(TAG, "checked : " + lists.get(i).getName() + args2 );
                                 lists.get(i).setGroup(args2);
                                 Cdh.update(lists.get(i));
+                            }else{
+                                Log.e(TAG, "unchecked : " + lists.get(i).getName() + args2 );
                             }
                         }
+                        mListView.clearChoices();
                         getDialog().dismiss();
                     }
                 });
 
             break;
             case "minus":
-                mListView.setAdapter(mAdapter);
                 lists = Cdh.getGroupData(args2);
+                mAdapter = new AddPeopleAdapter();
                 for (int i = 0; i < lists.size(); i++) {
                     mAdapter.addItem(lists.get(i));
                 }
+                mListView.setAdapter(mAdapter);
+                mListView.clearChoices();
+                Log.e(TAG, "mlistview초기화");
+
                 Button mibtn = (Button) rootView.findViewById(R.id.addpeoplebtn);
                 mibtn.setText("선택된 사람 제거");
                 mibtn.setOnClickListener(new View.OnClickListener() {
@@ -106,12 +119,17 @@ public class AddPeople extends DialogFragment {
                     public void onClick(View v) {
                         SparseBooleanArray checkedItems = mListView.getCheckedItemPositions();
                         int count = mAdapter.getCount();
+                        Log.e(TAG, "onClick: " + count+ " " + args2 );
                         for (int i = count - 1; i >= 0; i--) {
                             if (checkedItems.get(i)) {
+                                Log.e(TAG, "checked : " + lists.get(i).getName() + args2 );
                                 lists.get(i).setGroup("unknown");
                                 Cdh.update(lists.get(i));
+                            }else{
+                                Log.e(TAG, "unchecked : " + lists.get(i).getName() + args2 );
                             }
                         }
+                        mListView.clearChoices();
                         getDialog().dismiss();
                     }
                 });
@@ -121,4 +139,5 @@ public class AddPeople extends DialogFragment {
 
         return rootView;
     }
+
 }
