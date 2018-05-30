@@ -111,21 +111,13 @@ public class GroupManageFragment extends DialogFragment {
                         String selectedText = items[which].toString();
                         switch(selectedText){
                             case "멤버 추가":
-                                FragmentManager fm = getActivity().getFragmentManager();
                                 AddPeople Adialog = AddPeople.newInstance("add",selectedgroup);
                                 Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
-                                Adialog.show(fm,"AddPeopleFragment");
+                                Adialog.show(getActivity().getFragmentManager(),"AddPeopleFragment");
 
-                                fm.executePendingTransactions();
-                                Adialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                    @Override
-                                    public void onDismiss(DialogInterface dialog) {
-                                        mAdapter.clear();
-                                        setmAdapter();
-                                        mAdapter.notifyDataSetChanged();
-                                    }
-                                });
-
+                                mAdapter.clear();
+                                setmAdapter();
+                                mAdapter.notifyDataSetChanged();
                                 break;
                             case "그룹 제거":
                                 AlertDialog.Builder removeBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
@@ -164,19 +156,12 @@ public class GroupManageFragment extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedgroup = MainActivity.groups.get(position);
-                FragmentManager fm = getActivity().getFragmentManager();
                 AddPeople Adialog = AddPeople.newInstance("minus",selectedgroup);
                 Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
-                Adialog.show(fm,"AddPeopleFragment");
-                fm.executePendingTransactions();
-                Adialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        mAdapter.clear();
-                        setmAdapter();
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+                Adialog.show(getActivity().getFragmentManager(),"AddPeopleFragment");
+                mAdapter.clear();
+                setmAdapter();
+                mAdapter.notifyDataSetChanged();
             }
         });
         return rootView;
