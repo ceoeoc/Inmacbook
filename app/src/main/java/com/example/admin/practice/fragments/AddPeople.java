@@ -66,11 +66,11 @@ public class AddPeople extends DialogFragment {
                 int count = mAdapter.getCount();
                 for(int i = count - 1 ; i >= 0 ; i--){
                     if(checkedItems.get(i)){
-                        lists.get(i).setGroup(args1);
+                        lists.get(i).setGroup(args1.toString());
                         Cdh.update(lists.get(i));
                     }
                 }
-                dismiss();
+                getDialog().dismiss();
             }
         });
 

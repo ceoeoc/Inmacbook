@@ -16,9 +16,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.admin.practice.DB.CIDBHandler;
+import com.example.admin.practice.ListViewItem;
 import com.example.admin.practice.R;
 import com.example.admin.practice.activites.MainActivity;
 import com.example.admin.practice.adapters.ContactsAdapter;
+import com.example.admin.practice.adapters.GroupAdapter;
 
 import java.lang.String;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class GroupManageFragment extends DialogFragment {
     private ImageButton cB;
     private Button nG;
     private ListView mListView;
-    private ContactsAdapter mAdapter;
+    private GroupAdapter mAdapter;
     private String selectedgroup;
 
     private CIDBHandler Cdh;
@@ -46,7 +48,7 @@ public class GroupManageFragment extends DialogFragment {
         View rootView = inflater.inflate(R.layout.group_fragment, container, false);
         Cdh = new CIDBHandler(getActivity());
         Cdh.open();
-        mAdapter = new ContactsAdapter();
+        mAdapter = new GroupAdapter();
         mListView = (ListView) rootView.findViewById(R.id.grouplist);
 
         mListView.setAdapter(mAdapter);
@@ -89,7 +91,12 @@ public class GroupManageFragment extends DialogFragment {
                 addBuilder.show();
             }
         });
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+            }
+        });
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -109,11 +116,13 @@ public class GroupManageFragment extends DialogFragment {
                                 AddPeople Adialog = AddPeople.newInstance(selectedgroup);
                                 Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
                                 Adialog.show(getActivity().getFragmentManager(),"AddPeopleFragment");
+                                mAdapter.notifyDataSetChanged();
+                                mListView.setAdapter(mAdapter);
                                 break;
                             case "그룹 제거":
                                 AlertDialog.Builder removeBuilder = new AlertDialog.Builder(getActivity(),R.style.MyAlterDialogStyle);
-                                removeBuilder.setTitle("Remove");
-                                removeBuilder.setMessage("If you select OK button, All data will be deleted. Please select carefully.");
+                                removeBuilder.setTitle("그룹 제거하기");
+                                removeBuilder.setMessage("OK 버튼을 누르면 그룹이 제거됩니다.");
                                 removeBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -123,6 +132,7 @@ public class GroupManageFragment extends DialogFragment {
                                         mAdapter.notifyDataSetChanged();
                                         mListView.setAdapter(mAdapter);
                                         Toast.makeText(getActivity(),"Deleted Data", Toast.LENGTH_SHORT).show();
+
                                     }
                                 });
                                 removeBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {

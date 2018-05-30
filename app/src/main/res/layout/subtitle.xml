@@ -15,7 +15,7 @@
             android:fontFamily="@font/notosanscjdemilight"
             android:textAllCaps="false"
             android:textColor="#000000"
-            android:textSize="15sp"/>
+            android:textSize="@dimen/text_size"/>
 
     </FrameLayout>
 </LinearLayout>

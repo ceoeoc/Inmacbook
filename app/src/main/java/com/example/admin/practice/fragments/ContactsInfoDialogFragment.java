@@ -173,7 +173,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         gsp.setItems(MainActivity.groups);
         gsp.setSelectedIndex(MainActivity.groups.size()-1);
         for(int i=0;i<MainActivity.groups.size();i++) {
-            if(mitem.getGroup() == MainActivity.groups.get(i)) {
+            if(mitem.getGroup().toString() == MainActivity.groups.get(i).toString()) {
                 gsp.setSelectedIndex(i);
             }
         }

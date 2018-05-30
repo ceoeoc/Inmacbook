@@ -1,6 +1,7 @@
 package com.example.admin.practice.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
@@ -29,9 +30,8 @@ import java.util.List;
 
 public class ContactsAdapter extends BaseAdapter {
     private static final int ITEM_TITLE = 0;
-    private static final int ITEM_GROUP = 1;
-    private static final int ITEM_CONTACT = 2;
-    private static final int ITEM_TYPE_MAX = 3;
+    private static final int ITEM_CONTACT = 1;
+    private static final int ITEM_TYPE_MAX = 2;
 
     private ArrayList<ListViewItem> listViewItems = new ArrayList<>();
 
@@ -77,17 +77,6 @@ public class ContactsAdapter extends BaseAdapter {
                 }
 
                 break;
-            case ITEM_GROUP:
-                if (convertView == null) {
-                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    convertView = inflater.inflate(R.layout.group_list, parent, false);
-                    TextView tv_gn = (TextView) convertView.findViewById(R.id.groupname);
-                    TextView tv_sz = (TextView) convertView.findViewById(R.id.groupnumber);
-                    tv_gn.setText(listViewItem.getTitleStr());
-                    tv_sz.setText("" + listViewItem.getSz());
-                }
-
-                break;
             case ITEM_CONTACT:
                 if (convertView == null) {
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -123,12 +112,6 @@ public class ContactsAdapter extends BaseAdapter {
             case ITEM_TITLE:
                 item.setType(ITEM_TITLE);
                 item.setStr(str);
-                break;
-            case ITEM_GROUP:
-                item.setType(ITEM_GROUP);
-                item.setSz(sz);
-                item.setStr(str);
-
                 break;
             case ITEM_CONTACT:
                 item.setType(ITEM_CONTACT);

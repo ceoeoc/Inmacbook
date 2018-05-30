@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:divider="#000000"
+        android:divider="#FFFFFF"
         android:dividerHeight="1dp"
         android:paddingBottom="60dp"
         android:focusable="false">
@@ -40,6 +40,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_size"
         android:text="새 그룹 추가하기" />
 
 </LinearLayout>

@@ -3,9 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ListView
+        android:id = "@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:divider="#FFFFFF"
+        android:dividerHeight="1dp"
+        android:paddingBottom="60dp"
+        android:choiceMode="multipleChoice">
+    </ListView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:orientation="horizontal">
 
         <Button
@@ -14,21 +26,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="추가하기"
+            android:textSize="@dimen/text_size"
             android:textColor="@color/colorAccent"
             android:background="@color/colorPrimaryDark"/>
 
     </LinearLayout>
-
-    <ListView
-        android:layout_marginTop="50dp"
-        android:id = "@+id/listview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:divider="#000000"
-        android:dividerHeight="1dp"
-        android:paddingBottom="60dp"
-        android:choiceMode="multipleChoice">
-    </ListView>
-
 </FrameLayout>

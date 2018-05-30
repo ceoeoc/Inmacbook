@@ -62,9 +62,6 @@ public class AddPeopleAdapter extends BaseAdapter{
             checkBox.setChecked(lists.get(position).checked);
             tv.setText(lists.get(position).ci.getName());
         }
-
-
-
         return convertView;
     }
     public void addItem(ContactsItem ci){

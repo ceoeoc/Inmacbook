@@ -49,15 +49,15 @@ public class ContactsFragment extends Fragment {
         mAdapter.clear();
         mListView.setAdapter(mAdapter);
         List<ContactsItem> lists = dh.getData(0);
-
+        /*
         listViewItemList.add(new ListViewItem(0,"즐겨찾기"));
         listViewItemList.add(new ListViewItem(0,"그룹"));
         for(int i = 0 ; i < MainActivity.groups.size();i++){
             listViewItemList.add(new ListViewItem(1,dh.sizeofData(MainActivity.groups.get(i),0),MainActivity.groups.get(i)));
-        }
+        }*/
         listViewItemList.add(new ListViewItem(0,"목록"));
         for(int i = 0 ; i < lists.size();i++){
-            listViewItemList.add(new ListViewItem(2,lists.get(i)));
+            listViewItemList.add(new ListViewItem(1,lists.get(i)));
         }
         mAdapter.addItem(listViewItemList);
         /*mAdapter.addItem(0,0,"즐겨찾기",null);
@@ -94,19 +94,11 @@ public class ContactsFragment extends Fragment {
             }
         });
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(),"ClickItem at " + position, Toast.LENGTH_SHORT).show();
-            }
-        });
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedItem = listViewItemList.get(position);
-                if(selectedItem.getType() == 1) {
-                    Toast.makeText(getActivity(),"ClickItem at " + position, Toast.LENGTH_SHORT).show();
-                }else if (selectedItem.getType() == 2) {
+                if (selectedItem.getType() == 1) {
                     final List<String> listitems = new ArrayList<>();
                     listitems.add("즐겨찾기");
                     listitems.add("자세히 보기");
