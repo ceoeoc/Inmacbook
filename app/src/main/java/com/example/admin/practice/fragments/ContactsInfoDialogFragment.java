@@ -39,8 +39,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
     private List<LogObject> callLogs;
     private ImageButton oB,cB;
     private ImageButton eN,eP;
-    private TextView name, phone;
-    private MaterialSpinner gsp;
+    private TextView name, phone, group;
     private String mcid;
     private String selectedGroup;
 
@@ -126,8 +125,8 @@ public class ContactsInfoDialogFragment extends DialogFragment {
             }
         });
 
-        gsp = (MaterialSpinner) rootView.findViewById(R.id.gspinner);
-        setSpinner();
+        group = (TextView) rootView.findViewById(R.id.group);
+        group.setText(mitem.getGroup());
         long subTime = 1000 * 60 * 60 * 24 * -1;
         long date = System.currentTimeMillis() + 7 * subTime;
 
@@ -166,27 +165,5 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         });
 
         return rootView;
-    }
-
-    public void setSpinner(){
-        MainActivity.groups.add("정의 되지 않음");
-        gsp.setItems(MainActivity.groups);
-        gsp.setSelectedIndex(MainActivity.groups.size()-1);
-        for(int i=0;i<MainActivity.groups.size();i++) {
-            if(mitem.getGroup().toString() == MainActivity.groups.get(i).toString()) {
-                gsp.setSelectedIndex(i);
-            }
-        }
-        MainActivity.groups.remove(MainActivity.groups.size()-1);
-        gsp.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                if(item != "정의 되지 않음") {
-                    selectedGroup = item;
-                    oB.setEnabled(true);
-                }
-            }
-        });
     }
 }

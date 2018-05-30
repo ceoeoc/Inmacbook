@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ public class ContactsFragment extends Fragment {
     private ListView mListView;
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<>();
     private ContactsAdapter mAdapter;
+    private List<ContactsItem> lists;
     private ListViewItem selectedItem;
     private FloatingActionButton cfab,gfab;
     @Override
@@ -41,32 +43,16 @@ public class ContactsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.contacts_fragment, container, false);
         mListView = (ListView) rootView.findViewById(R.id.listview);
 
-        mAdapter = new ContactsAdapter();
-
         dh = new CIDBHandler(getActivity());
         dh.open();
-
-        mAdapter.clear();
-        mListView.setAdapter(mAdapter);
-        List<ContactsItem> lists = dh.getData(0);
-        /*
-        listViewItemList.add(new ListViewItem(0,"즐겨찾기"));
-        listViewItemList.add(new ListViewItem(0,"그룹"));
-        for(int i = 0 ; i < MainActivity.groups.size();i++){
-            listViewItemList.add(new ListViewItem(1,dh.sizeofData(MainActivity.groups.get(i),0),MainActivity.groups.get(i)));
-        }*/
-        listViewItemList.add(new ListViewItem(0,"목록"));
+        mAdapter = new ContactsAdapter();
+        lists = dh.getData(0);
         for(int i = 0 ; i < lists.size();i++){
             listViewItemList.add(new ListViewItem(1,lists.get(i)));
         }
         mAdapter.addItem(listViewItemList);
-        /*mAdapter.addItem(0,0,"즐겨찾기",null);
-        mAdapter.addItem(0,0,"그룹",null);
-        mAdapter.addItem(1,dh.sizeofData(MainActivity.groups.get(i),0),MainActivity.groups.get(i),null));
-        mAdapter.addItem(0,0,"목록",null);
-        for(int i = 0 ; i < lists.size() ; i++){
-            mAdapter.addItem(2,0,null,lists.get(i));
-        }*/
+        mListView.setAdapter(mAdapter);
+
         cfab = (FloatingActionButton) rootView.findViewById(R.id.cafab);
         cfab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +67,7 @@ public class ContactsFragment extends Fragment {
                         .bubbleColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary)) //Optional - default: Azure Blue
                         .bubbleTextColor(Color.WHITE) //Optional - default: White
                         .showPickerForResult(MainActivity.CONTACT_PICKER_REQUEST);
+
             }
         });
 
@@ -96,11 +83,11 @@ public class ContactsFragment extends Fragment {
 
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 selectedItem = listViewItemList.get(position);
                 if (selectedItem.getType() == 1) {
                     final List<String> listitems = new ArrayList<>();
-                    listitems.add("즐겨찾기");
+                    //listitems.add("즐겨찾기");
                     listitems.add("자세히 보기");
                     listitems.add("데이터 제거");
                     listitems.add("호감도 올리기");
@@ -112,9 +99,9 @@ public class ContactsFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             String selectedText = items[which].toString();
                             switch (selectedText) {
-                                case "즐겨찾기":
+                                /*case "즐겨찾기":
                                     Toast.makeText(getActivity(), "Add to Favorite list", Toast.LENGTH_SHORT).show();
-                                    break;
+                                    break;*/
                                 case "자세히 보기":
                                     ContactsInfoDialogFragment Cdialog = ContactsInfoDialogFragment.newInstance(selectedItem.getCi().get_id());
                                     Cdialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
@@ -127,9 +114,9 @@ public class ContactsFragment extends Fragment {
                                     removeBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            lists.remove(position);
                                             dh.delete(selectedItem.getCi().get_id());
-                                            mAdapter.notifyDataSetChanged();
-                                            mListView.setAdapter(mAdapter);
+                                            Refresh();
                                             Toast.makeText(getActivity(), "Deleted Data", Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -144,8 +131,7 @@ public class ContactsFragment extends Fragment {
                                 case "호감도 올리기":
                                     selectedItem.getCi().setPoint(selectedItem.getCi().getPoint() + 10);
                                     dh.update(selectedItem.getCi());
-                                    mAdapter.notifyDataSetChanged();
-                                    mListView.setAdapter(mAdapter);
+                                    Refresh();
                                     break;
                                 default:
                                     break;
@@ -163,6 +149,10 @@ public class ContactsFragment extends Fragment {
         return rootView;
     }
 
+    public void Refresh(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
 
 }
 

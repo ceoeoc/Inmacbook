@@ -3,6 +3,8 @@ package com.example.admin.practice.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,12 +93,7 @@ public class GroupManageFragment extends DialogFragment {
                 addBuilder.show();
             }
         });
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            }
-        });
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -113,7 +110,7 @@ public class GroupManageFragment extends DialogFragment {
                         String selectedText = items[which].toString();
                         switch(selectedText){
                             case "멤버 추가":
-                                AddPeople Adialog = AddPeople.newInstance(selectedgroup);
+                                AddPeople Adialog = AddPeople.newInstance("add",selectedgroup);
                                 Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
                                 Adialog.show(getActivity().getFragmentManager(),"AddPeopleFragment");
                                 mAdapter.notifyDataSetChanged();
@@ -132,7 +129,6 @@ public class GroupManageFragment extends DialogFragment {
                                         mAdapter.notifyDataSetChanged();
                                         mListView.setAdapter(mAdapter);
                                         Toast.makeText(getActivity(),"Deleted Data", Toast.LENGTH_SHORT).show();
-
                                     }
                                 });
                                 removeBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -149,10 +145,27 @@ public class GroupManageFragment extends DialogFragment {
                     }
                 });
                 builder.show();
-                return false;
+                return true;
             }
         });
-
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedgroup = MainActivity.groups.get(position);
+                AddPeople Adialog = AddPeople.newInstance("minus",selectedgroup);
+                Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
+                Adialog.show(getActivity().getFragmentManager(),"AddPeopleFragment");
+                mAdapter.notifyDataSetChanged();
+                mListView.setAdapter(mAdapter);
+            }
+        });
         return rootView;
+    }
+
+    public void Refresh(){
+        final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.detach(this);
+        ft.attach(this);
+        ft.commit();
     }
 }
