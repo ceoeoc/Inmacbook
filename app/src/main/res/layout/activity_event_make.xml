@@ -41,10 +41,12 @@
 
     <NumberPicker
         android:id="@+id/timeMeasure"
-        android:layout_width="220dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="80dp"
+        android:layout_width="161dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="112dp"
         android:layout_marginTop="28dp"
+        android:backgroundTint="#000000"
+        android:theme="@style/AppTheme.Picker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/endDateButton" />
 
@@ -67,6 +69,7 @@
         android:layout_marginStart="56dp"
         android:layout_marginTop="52dp"
         android:hint="이벤트명"
+        android:onClick="inputTitle"
         android:inputType="textCapWords"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"

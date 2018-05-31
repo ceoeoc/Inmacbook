@@ -93,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
             editor.putString(key,null);
         }
         editor.apply();
-        }
+    }
 
-        private ArrayList<String> getStringArrayPref(Context context, String key){
+    private ArrayList<String> getStringArrayPref(Context context, String key){
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
             String json = pref.getString(key,null);
             ArrayList<String> urls = new ArrayList<String>();
@@ -180,6 +180,18 @@ public class MainActivity extends AppCompatActivity {
         return bluetoothMacAddress;
     }
 
+    public void updateGroups() {
+        groups = new ArrayList<String>();
+        if (groups.addAll(getStringArrayPref(this, "groups"))) {
+
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mSectionsPagerAdapter.notifyDataSetChanged();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,10 +210,9 @@ public class MainActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        groups = new ArrayList<String>();
-        if(groups.addAll( getStringArrayPref(this,"groups"))){
 
-        }
+        updateGroups();
+
         Cdh = new CIDBHandler(this);
         Cdh.open();
         Rdh = new CRDBHandler(this);
@@ -219,11 +230,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         //추가된 아이들 핸드폰 번호 리스트
-        //List<String> phonelist = Cdh.getPhoneListNoBluth();
-
-        //for(int i = 0 ; i < phonelist.size(); i++){
-        //    Log.d("v", "phonelist no bluth : " + phonelist.get(i));
-        //}
+        List<String> phonelist = Cdh.getPhoneListNoBluth();
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));

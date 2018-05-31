@@ -50,6 +50,21 @@ public class CIDBHandler {
         return i;
     }
 
+    public void deleteGroup(String args){
+        ContactsItem c;
+        Cursor curs = db.query(CIDBHelper.TBName, null
+                        , CIDBHelper.ColGroup + " = " + "'" + args+ "'", null, null, null, null, null);
+        curs.moveToFirst();
+        ContentValues cv = new ContentValues();
+        cv.put(CIDBHelper.ColGroup, "unknown");
+        while(!curs.isAfterLast()){
+            c = cursorToContact(curs);
+            db.update(CIDBHelper.TBName, cv, CIDBHelper.ColId + " = " + "'"+ c.get_id()+"'",null);
+            curs.moveToNext();
+        }
+        curs.close();
+    }
+
     public void update(ContactsItem con){
         ContentValues cv = new ContentValues();
         cv.put(CIDBHelper.ColId, con.get_id());
@@ -157,7 +172,7 @@ public class CIDBHandler {
         c.setLevel(curs.getInt(4));
         c.setFeat(curs.getString(5));
         c.setGroup(curs.getString(6));
-        //c.setBluth(curs.getString(7));
+        c.setBluth(curs.getString(7));
         //c.setPhoto(curs.getBlob(7));
         return c;
     }

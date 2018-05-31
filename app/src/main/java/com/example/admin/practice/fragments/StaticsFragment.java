@@ -1,5 +1,6 @@
 package com.example.admin.practice.fragments;
 
+import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,22 +16,26 @@ import android.widget.Spinner;
 import com.example.admin.practice.DB.CIDBHandler;
 import com.example.admin.practice.LogsManager;
 import com.example.admin.practice.R;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class StaticsFragment extends Fragment {
     int num1,num2,num3,num4,num5,size;
 
     private CIDBHandler dh;
-    private Spinner spinner;
+    private MaterialSpinner spinner;
     private WebView webView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.static_fragment, container, false);
         webView = (WebView) rootView.findViewById(R.id.staticwebview);
-        spinner = (Spinner) rootView.findViewById(R.id.staticspinner);
+        spinner = (MaterialSpinner) rootView.findViewById(R.id.staticspinner);
         setSpinner();
 
         dh = new CIDBHandler(getActivity());
@@ -45,19 +50,18 @@ public class StaticsFragment extends Fragment {
         return rootView;
     }
     public void setSpinner(){
-        ArrayAdapter groupAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.statics , android.R.layout.simple_spinner_item);
-        groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(groupAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        Resources res = getResources();
+        String[] arr = res.getStringArray(R.array.statics);
+        List<String> ml = new ArrayList<>();
+        for(String s : arr){
+            ml.add(s);
+        }
+        spinner.setItems(ml);
+        spinner.setSelectedIndex(0);
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 getStatic(position);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
