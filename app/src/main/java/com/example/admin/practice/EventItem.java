@@ -71,7 +71,9 @@ public class EventItem {
     }
 
     public void setMemberCid(List<String> memberCid) {
-        MemberCid = memberCid;
+        for(int i = 0 ; i < memberCid.size(); i++) {
+            MemberCid.add(memberCid.get(i));
+        }
     }
 
     public void setStDate(String stDate) {

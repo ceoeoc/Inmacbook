@@ -83,12 +83,12 @@ public class ContactsAdapter extends BaseAdapter {
                     convertView = inflater.inflate(R.layout.contacts_list, parent, false);
                     TextView m_TextView = (TextView) convertView.findViewById(R.id.tv_name);
                     ProgressBar m_Pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
-                    m_TextView.setText("lv " + listViewItem.getCi().getLevel() + " " + listViewItem.getCi().getName());
+                    m_TextView.setText(listViewItem.getCi().getName());
                     m_Pgb.setProgress(listViewItem.getCi().getPoint());
                 }else{
                     TextView m_TextView = (TextView) convertView.findViewById(R.id.tv_name);
                     ProgressBar m_Pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
-                    m_TextView.setText("lv " + listViewItem.getCi().getLevel() + " " + listViewItem.getCi().getName());
+                    m_TextView.setText(listViewItem.getCi().getName());
                     m_Pgb.setProgress(listViewItem.getCi().getPoint());
                 }
             break;

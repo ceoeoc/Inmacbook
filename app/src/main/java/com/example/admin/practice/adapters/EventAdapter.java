@@ -43,8 +43,8 @@ public class EventAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.event_list, parent, false);
             TextView tv_title = (TextView) convertView.findViewById(R.id.eventname);
             tv_title.setText(mitem.getEventName());
-            TextView tv_number = (TextView) convertView.findViewById(R.id.eventnumber);
-            tv_number.setText(mitem.getSize());
+            TextView tv_progess = (TextView) convertView.findViewById(R.id.eventprogress);
+            tv_progess.setText(mitem.getProgress());
             TextView tv_date = (TextView) convertView.findViewById(R.id.date);
             tv_date.setText(mitem.getStDate() + " " + mitem.getEndDate());
         }
