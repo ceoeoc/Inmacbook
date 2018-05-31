@@ -26,6 +26,14 @@ public class AddPeople extends DialogFragment {
     private static final String ARG_PARA1 = "para1";
     private static final String ARG_PARA2 = "para2";
 
+    public interface OnMyDialogResult{
+
+        void finish(ArrayList<String> list);
+
+    }
+
+    OnMyDialogResult myDialogResult;
+
     private AddPeopleAdapter mAdapter;
     private ListView mListView;
     private ImageButton cB;
@@ -135,6 +143,7 @@ public class AddPeople extends DialogFragment {
                 });
             break;
             case "addlist":
+                final ArrayList<String> result = new ArrayList<>();
                 lists = Cdh.getData(0);
                 mAdapter = new AddPeopleAdapter();
                 for (int i = 0; i < lists.size(); i++) {
@@ -153,13 +162,13 @@ public class AddPeople extends DialogFragment {
                         for (int i = count - 1; i >= 0; i--) {
                             if (checkedItems.get(i)) {
                                 Log.e(TAG, "checked : " + lists.get(i).getName() + args2 );
-                                lists.get(i).setGroup(args2);
-                                Cdh.update(lists.get(i));
+                                result.add(lists.get(i).get_id());
                             }else{
                                 Log.e(TAG, "unchecked : " + lists.get(i).getName() + args2 );
                             }
                         }
                         mListView.clearChoices();
+                        myDialogResult.finish(result);
                         getDialog().dismiss();
                     }
                 });
@@ -168,6 +177,10 @@ public class AddPeople extends DialogFragment {
 
 
         return rootView;
+    }
+
+    public void setDialogResult(OnMyDialogResult dialogResult){
+        myDialogResult = dialogResult;
     }
 
 }

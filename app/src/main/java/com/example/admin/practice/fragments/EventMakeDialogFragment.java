@@ -1,10 +1,7 @@
 package com.example.admin.practice.fragments;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.icu.util.Calendar;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
@@ -14,18 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.example.admin.practice.DB.EVDBHandler;
+import com.example.admin.practice.EventItem;
 import com.example.admin.practice.R;
+import com.example.admin.practice.activites.MainActivity;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.List;
 
 public class EventMakeDialogFragment extends DialogFragment {
-
+    EVDBHandler edh;
     Button TxtStartDate,TxtEndDate,TimeBtn,AddPersonBtn;
+    EditText nametxt;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,13 +35,17 @@ public class EventMakeDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.event_make, container, false);
+        edh = new EVDBHandler(getActivity());
+        edh.open();
 
-        Calendar c = Calendar.getInstance();
-        int cyear = c.get(Calendar.YEAR);
-        int cmonth = c.get(Calendar.MONTH);
-        int cday = c.get(Calendar.DAY_OF_MONTH);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
+        final Calendar c = Calendar.getInstance();
+        final int cyear = c.get(Calendar.YEAR);
+        final int cmonth = c.get(Calendar.MONTH);
+        final int cday = c.get(Calendar.DAY_OF_MONTH);
+        final int hour = c.get(Calendar.HOUR_OF_DAY);
+        final int minute = c.get(Calendar.MINUTE);
+
+        nametxt = (EditText)rootView.findViewById(R.id.eventname);
 
         TxtStartDate = (Button)rootView.findViewById(R.id.startDateButton);
         TxtStartDate.setOnClickListener(new View.OnClickListener() {
@@ -72,17 +75,42 @@ public class EventMakeDialogFragment extends DialogFragment {
             }
         });
 
-        AddPersonBtn = (Button) rootView.findViewById(R.id.selectPersonButton);
+        AddPersonBtn = (Button) rootView.findViewById(R.id.SelectPersonButton);
         AddPersonBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddPeople Adialog = AddPeople.newInstance("addlist","");
                 Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
                 Adialog.show(getActivity().getFragmentManager(),"AddPeopleFragment");
+                Adialog.setDialogResult(new AddPeople.OnMyDialogResult() {
+                    @Override
+                    public void finish(ArrayList<String> list) {
+                        EventItem item = new EventItem();
+                        item.setEventId(MainActivity.EID);
+                        item.setStDate(TxtStartDate.getText().toString());
+                        item.setEndDate(TxtEndDate.getText().toString());
+                        item.setEventName(nametxt.getText().toString());
+                        item.setHour(TimeBtn.getText().toString());
+                        item.setProgress("0");
+                        item.setMemberCid(list);
+                        edh.insert(item);
+                        MainActivity.EID ++;
+                        MainActivity.setIntPref(getActivity(),"EID",MainActivity.EID);
+                        getDialog().dismiss();
+                    }
+                });
             }
         });
 
-        return rootView
+        Button cancel = (Button) rootView.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDialog().dismiss();
+            }
+        });
+
+        return rootView;
     }
 
     private DatePickerDialog.OnDateSetListener listener1 = new DatePickerDialog.OnDateSetListener() {

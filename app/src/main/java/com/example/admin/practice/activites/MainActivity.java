@@ -69,6 +69,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     public static final int CONTACT_PICKER_REQUEST = 991;
     public static ArrayList<String> groups;
+    public static int EID;
     private static final int REQUEST_ENABLE_BT=2;
 
     private ViewPager mViewPager;
@@ -94,7 +95,17 @@ public class MainActivity extends AppCompatActivity {
         }
         editor.apply();
     }
-
+    public static void setIntPref(Context context, String key, int val){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(key, val);
+        editor.apply();
+    }
+    private int getIntPref(Context context, String key){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        int val = pref.getInt(key,0);
+        return val;
+    }
     private ArrayList<String> getStringArrayPref(Context context, String key){
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
             String json = pref.getString(key,null);
@@ -211,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
+        EID = getIntPref(this,"EID");
         updateGroups();
 
         Cdh = new CIDBHandler(this);
@@ -458,7 +470,6 @@ public class MainActivity extends AppCompatActivity {
     //블루투스 페어링 안된 목록 가져오기
 
     BluetoothAdapter mBluetoothAdapter;
-
     private static final int PERMISSIONS =1;
 
     private final BroadcastReceiver mReceiver =new BroadcastReceiver() {

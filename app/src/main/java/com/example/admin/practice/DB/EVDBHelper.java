@@ -12,6 +12,7 @@ public class EVDBHelper extends SQLiteOpenHelper {
     public static String TBName = "Event";
 
     public static String ColEid = "eid";
+    public static String ColName = "ename";
     public static String ColStDate = "std";
     public static String ColEdDate = "edd";
     public static String ColHour = "hour";
@@ -19,7 +20,8 @@ public class EVDBHelper extends SQLiteOpenHelper {
     public static String ColMem = "member";
 
     public static String create =
-            "CREATE TABLE " + TBName + " ( " + ColEid + " text primary key, "
+            "CREATE TABLE " + TBName + " ( " + ColEid + " integer primary key, "
+                    + ColName + " text not null,"
                     + ColStDate + " text not null, "
                     + ColEdDate + " text not null, "
                     + ColHour + " integer not null, "
