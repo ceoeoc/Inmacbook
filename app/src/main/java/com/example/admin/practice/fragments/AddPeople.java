@@ -134,6 +134,36 @@ public class AddPeople extends DialogFragment {
                     }
                 });
             break;
+            case "addlist":
+                lists = Cdh.getData(0);
+                mAdapter = new AddPeopleAdapter();
+                for (int i = 0; i < lists.size(); i++) {
+                    mAdapter.addItem(lists.get(i));
+                }
+                mListView.setAdapter(mAdapter);
+                mListView.clearChoices();
+                Button addLbtn = (Button) rootView.findViewById(R.id.addpeoplebtn);
+                addLbtn.setText("선택된 사람 추가");
+                addLbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SparseBooleanArray checkedItems = mListView.getCheckedItemPositions();
+                        int count = mAdapter.getCount();
+                        Log.e(TAG, "onClick: " + count+ " " + args2 );
+                        for (int i = count - 1; i >= 0; i--) {
+                            if (checkedItems.get(i)) {
+                                Log.e(TAG, "checked : " + lists.get(i).getName() + args2 );
+                                lists.get(i).setGroup(args2);
+                                Cdh.update(lists.get(i));
+                            }else{
+                                Log.e(TAG, "unchecked : " + lists.get(i).getName() + args2 );
+                            }
+                        }
+                        mListView.clearChoices();
+                        getDialog().dismiss();
+                    }
+                });
+            break;
         }
 
 

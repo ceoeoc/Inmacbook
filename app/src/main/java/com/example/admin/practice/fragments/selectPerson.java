@@ -1,11 +1,14 @@
 package com.example.admin.practice.fragments;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.admin.practice.DB.CIDBHandler;
 import com.example.admin.practice.R;
 
 import java.util.ArrayList;
@@ -25,6 +28,10 @@ public class selectPerson extends AppCompatActivity {
 
     public void onSelectPerson(View v)
     {
+        AddPeople Adialog = AddPeople.newInstance("addlist","mola");
+        Adialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme );
+        Adialog.show(getFragmentManager(),"AddPeopleFragment");
+
         final List<String> ListItems = new ArrayList<>();
         ListItems.add("사과");    //친구목록 불러와서 해야댈듯
         ListItems.add("배");
@@ -35,7 +42,7 @@ public class selectPerson extends AppCompatActivity {
         final List SelectedItems  = new ArrayList();
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.MyAlterDialogStyle);
         builder.setTitle("AlertDialog Title");
         builder.setMultiChoiceItems(items, null,
                 new DialogInterface.OnMultiChoiceClickListener() {

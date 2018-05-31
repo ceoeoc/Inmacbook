@@ -128,7 +128,7 @@ public class ContactsInfoDialogFragment extends DialogFragment {
         group = (TextView) rootView.findViewById(R.id.group);
         group.setText(mitem.getGroup());
         long subTime = 1000 * 60 * 60 * 24 * -1;
-        long date = System.currentTimeMillis() + 7 * subTime;
+        long date = System.currentTimeMillis() + 31 * subTime;
 
         ListView mlv = (ListView) rootView.findViewById(R.id.cllv);
         LogsManager logsManager = new LogsManager(getActivity());

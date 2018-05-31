@@ -7,7 +7,9 @@
 
     <string-array name="statics">
         <item>관리 비율 분석</item>
+        <item>통화 건수 통계</item>
         <item>통화 시간 통계</item>
+        <item>통화 건수대 시간 비율</item>
     </string-array>
 
     <string-array name="date_year">

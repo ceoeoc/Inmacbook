@@ -32,7 +32,7 @@
         </activity>
         <activity android:name=".activites.PreferenceActivity"
             android:label="@string/action_settings"/>
-        <activity android:name=".fragments.eventMake" />
+        <activity android:name=".fragments.EventMakeDialogFragment" />
         <activity android:name=".fragments.selectPerson" />
     </application>
 

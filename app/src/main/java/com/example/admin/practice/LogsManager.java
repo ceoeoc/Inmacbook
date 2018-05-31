@@ -221,7 +221,7 @@ public class LogsManager {
     }
     //그룹별 통화기록 횟수를 측정함
     @RequiresPermission(Manifest.permission.READ_CALL_LOG)
-    public HashMap<String,Integer> getLogs(HashMap<String,Integer> groups,int callType, long timelimit) {
+    public HashMap<String,Integer> getLogs(HashMap<String,Integer> groups,int callType, long timelimit,int type) {
         if(dh == null) {
             dh = new CIDBHandler(context);
             dh.open();
@@ -251,10 +251,23 @@ public class LogsManager {
             String selection;
             ContactsItem tmpCi = lists.get(i);
             selection = temp + " and " + CallLog.Calls.NUMBER + " = " + "'" + tmpCi.getPhone() + "'";
-
             Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, null, null);
-            if(cursor.getCount() == 0) continue;
-            groups.put(tmpCi.getGroup(),groups.get(tmpCi.getGroup()) + cursor.getCount());
+            switch (type) {
+                case 0://통화 건수 측정
+                    if (cursor.getCount() == 0) continue;
+                    groups.put(tmpCi.getGroup(), groups.get(tmpCi.getGroup()) + cursor.getCount());
+                break;
+                case 1://통화 시간 측정
+                    int sum = 0;
+                    int duration = cursor.getColumnIndex(CallLog.Calls.DURATION);
+                    while (cursor.moveToNext()) {
+                        String callDuration = cursor.getString(duration);
+                        sum += Integer.parseInt(callDuration);
+                    }
+                    if(sum == 0) continue;
+                    groups.put(tmpCi.getGroup(), groups.get(tmpCi.getGroup()) + sum);
+                break;
+            }
             cursor.close();
         }
 
