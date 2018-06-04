@@ -45,6 +45,7 @@ import com.example.admin.practice.ContactRecord;
 import com.example.admin.practice.ContactsItem;
 import com.example.admin.practice.DB.CIDBHandler;
 import com.example.admin.practice.DB.CRDBHandler;
+import com.example.admin.practice.DB.EVDBHandler;
 import com.example.admin.practice.DB.WebDBManager;
 import com.example.admin.practice.PermissionUtil;
 import com.example.admin.practice.fragments.ContactsFragment;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int CONTACT_PICKER_REQUEST = 991;
     public static ArrayList<String> groups;
     public static int EID;
+    public static ArrayList<String> inBluth;
     private static final int REQUEST_ENABLE_BT=2;
 
     private ViewPager mViewPager;
@@ -76,9 +78,43 @@ public class MainActivity extends AppCompatActivity {
 
     private CIDBHandler Cdh = null;
     private CRDBHandler Rdh = null;
+    private EVDBHandler Edh = null;
     private FragmentManager frgM;
     private Fragment frg = null;
     private FloatingActionButton fab;
+
+    public static void setIntArrayPref(Context context,String key, ArrayList<Integer> values){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        JSONArray a = new JSONArray();
+        for(int i = 0 ; i < values.size(); i++){
+            a.put(values.get(i));
+        }
+        if(!values.isEmpty()){
+            editor.putString(key, a.toString());
+        }else{
+            editor.putString(key,null);
+        }
+        editor.apply();
+    }
+
+    private ArrayList<Integer> getIntArrayPref(Context context, String key){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = pref.getString(key,null);
+        ArrayList<Integer> urls = new ArrayList<Integer>();
+        if(json != null){
+            try{
+                JSONArray a = new JSONArray(json);
+                for(int i = 0 ; i < a.length();i++){
+                    int url = a.optInt(i);
+                    urls.add(url);
+                }
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
+        return urls;
+    }
 
     public static void setStringArrayPref(Context context, String key, ArrayList<String> values){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -95,6 +131,25 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    private ArrayList<String> getStringArrayPref(Context context, String key){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = pref.getString(key,null);
+        ArrayList<String> urls = new ArrayList<String>();
+        if(json != null){
+            try{
+                JSONArray a = new JSONArray(json);
+                for(int i = 0 ; i < a.length();i++){
+                    String url = a.optString(i);
+                    urls.add(url);
+                }
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
+        return urls;
+    }
+
+
     public static void setIntPref(Context context, String key, int val){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
@@ -108,23 +163,6 @@ public class MainActivity extends AppCompatActivity {
         return val;
     }
 
-    private ArrayList<String> getStringArrayPref(Context context, String key){
-            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-            String json = pref.getString(key,null);
-            ArrayList<String> urls = new ArrayList<String>();
-            if(json != null){
-                try{
-                    JSONArray a = new JSONArray(json);
-                    for(int i = 0 ; i < a.length();i++){
-                        String url = a.optString(i);
-                        urls.add(url);
-                    }
-                }catch(JSONException e){
-                    e.printStackTrace();
-                }
-        }
-        return urls;
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
@@ -231,6 +269,8 @@ public class MainActivity extends AppCompatActivity {
         Cdh.open();
         Rdh = new CRDBHandler(this);
         Rdh.open();
+        Edh = new EVDBHandler(this);
+        Edh.open();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -273,7 +313,11 @@ public class MainActivity extends AppCompatActivity {
 
                 //dlist는 검색한 블루투스 목록
 
-                Cdh.getBluth(dlist);
+                inBluth = Cdh.getBluth(dlist);
+                Date d = new Date(System.currentTimeMillis());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String to = sdf.format(d);
+                Edh.getBluth(inBluth,to);
 
                 double LAT = 0;
                 double LNG = 0;

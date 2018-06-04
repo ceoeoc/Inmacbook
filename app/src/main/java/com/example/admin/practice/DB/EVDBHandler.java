@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.SQLException;
+import android.util.Log;
 
 import com.example.admin.practice.EventItem;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +91,26 @@ public class EVDBHandler {
         return con;
     }
 
+    public void getBluth(ArrayList<String> lists,String now){
+        EventItem c;
+        Cursor curs = db.query(EVDBHelper.TBName, null
+                , EVDBHelper.ColStDate + " >= " + "'"+now + "' and " + EVDBHelper.ColEdDate + " <= " + "'" + now+ "'" , null, null, null, null, null);
+        curs.moveToFirst();
+        while(!curs.isAfterLast()){
+            c = cursorToEvent(curs);
+            curs.moveToNext();
+            Log.d("between event", "STD: " + c.getStDate() + "EDD: " + c.getEndDate());
+            for(int i = 0 ; i < lists.size(); i++){
+                for(EventItem.MperP s : c.getMembers()){
+                    if(s.getMemberCid().equals(lists.get(i))){
+                        s.setMemP(s.getMemP() + 3);
+                    }
+                }
+
+            }
+        }
+
+    }
     public EventItem cursorToEvent(Cursor curs){
         EventItem c = new EventItem();
 

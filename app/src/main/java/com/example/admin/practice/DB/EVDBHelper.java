@@ -22,9 +22,9 @@ public class EVDBHelper extends SQLiteOpenHelper {
     public static String create =
             "CREATE TABLE " + TBName + " ( " + ColEid + " integer primary key, "
                     + ColName + " text not null,"
-                    + ColStDate + " text not null, "
-                    + ColEdDate + " text not null, "
-                    + ColHour + " integer not null, "
+                    + ColStDate + " date not null, "
+                    + ColEdDate + " date not null, "
+                    + ColHour + " time not null, "
                     + ColPrg + " integer not null, "
                     + ColMem + " text not null); ";
 

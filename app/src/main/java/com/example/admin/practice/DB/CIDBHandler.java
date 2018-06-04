@@ -135,7 +135,7 @@ public class CIDBHandler {
             c.setPoint(c.getPoint()+3);
             Log.w("plus", "getBluth: "+c.getName() + " " + c.getPoint());
             this.update(c);
-
+            ret.add(c.get_id());
             curs.close();
         }
         return ret;

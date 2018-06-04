@@ -19,6 +19,7 @@ import com.example.admin.practice.EventItem;
 import com.example.admin.practice.R;
 import com.example.admin.practice.activites.MainActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class EventMakeDialogFragment extends DialogFragment {
@@ -53,7 +54,6 @@ public class EventMakeDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 DatePickerDialog dialog = new DatePickerDialog(getActivity(), R.style.MyAlterDialogStyle ,listener1, cyear,cmonth,cday);
                 dialog.show();
-
             }
         });
 
@@ -116,21 +116,21 @@ public class EventMakeDialogFragment extends DialogFragment {
     private DatePickerDialog.OnDateSetListener listener1 = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            TxtStartDate.setText(String.format("%d/%d/%d", year, monthOfYear + 1, dayOfMonth));
+            TxtStartDate.setText(String.format("%d-%d-%d", year, monthOfYear + 1, dayOfMonth));
         }
     };
 
     private DatePickerDialog.OnDateSetListener listener2 = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            TxtEndDate.setText(String.format("%d/%d/%d", year, monthOfYear + 1, dayOfMonth));
+            TxtEndDate.setText(String.format("%d-%d-%d", year, monthOfYear + 1, dayOfMonth));
         }
     };
 
     private TimePickerDialog.OnTimeSetListener listener3 = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            TimeBtn.setText((String.format("%d/%d",hourOfDay,minute)));
+            TimeBtn.setText((String.format("%d:%d:00",hourOfDay,minute)));
         }
     };
 }
