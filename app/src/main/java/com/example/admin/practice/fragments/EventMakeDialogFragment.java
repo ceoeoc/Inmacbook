@@ -92,9 +92,9 @@ public class EventMakeDialogFragment extends DialogFragment {
                         item.setEventName(nametxt.getText().toString());
                         item.setHour(TimeBtn.getText().toString());
                         item.setProgress("0");
-                        item.setMemberCid(list);
+                        item.setMembers(list);
                         edh.insert(item);
-                        MainActivity.EID ++;
+                        MainActivity.EID++;
                         MainActivity.setIntPref(getActivity(),"EID",MainActivity.EID);
                         getDialog().dismiss();
                     }
@@ -130,7 +130,7 @@ public class EventMakeDialogFragment extends DialogFragment {
     private TimePickerDialog.OnTimeSetListener listener3 = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            TimeBtn.setText((String.format("%d%d",hourOfDay,minute)));
+            TimeBtn.setText((String.format("%d/%d",hourOfDay,minute)));
         }
     };
 }

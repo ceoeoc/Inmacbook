@@ -1,6 +1,7 @@
 package com.example.admin.practice.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.example.admin.practice.activites.MainActivity;
 import com.example.admin.practice.adapters.ContactsAdapter;
 import com.example.admin.practice.R;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
 import java.util.ArrayList;
@@ -40,7 +43,7 @@ public class ContactsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.contacts_fragment, container, false);
+        final View rootView = inflater.inflate(R.layout.contacts_fragment, container, false);
         mListView = (ListView) rootView.findViewById(R.id.listview);
 
         dh = new CIDBHandler(getActivity());
@@ -53,6 +56,7 @@ public class ContactsFragment extends Fragment {
         }
         mAdapter.addItem(listViewItemList);
         mListView.setAdapter(mAdapter);
+
 
         cfab = (FloatingActionButton) rootView.findViewById(R.id.cafab);
         cfab.setOnClickListener(new View.OnClickListener() {

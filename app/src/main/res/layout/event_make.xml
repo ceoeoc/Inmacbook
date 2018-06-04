@@ -15,18 +15,18 @@
         android:textAlignment="center" />
 
     <Button
-        android:id="@+id/endDateButton"
-        android:layout_width="220dp"
-        android:layout_height="58dp"
-        android:layout_gravity="center"
-        android:text="이벤트 종료 날짜" />
-
-    <Button
         android:id="@+id/startDateButton"
         android:layout_width="220dp"
         android:layout_height="58dp"
         android:layout_gravity="center"
         android:text="이벤트 시작 날짜" />
+
+    <Button
+        android:id="@+id/endDateButton"
+        android:layout_width="220dp"
+        android:layout_height="58dp"
+        android:layout_gravity="center"
+        android:text="이벤트 종료 날짜" />
 
     <Button
         android:id="@+id/timeMeasure"

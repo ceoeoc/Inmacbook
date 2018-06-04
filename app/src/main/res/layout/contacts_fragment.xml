@@ -15,7 +15,7 @@
         android:clipToPadding="false"/>
 
     <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/menu_yellow"
+        android:id="@+id/floatingmenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"

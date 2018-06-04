@@ -34,7 +34,7 @@ public class EVDBHandler {
         cv.put(EVDBHelper.ColEdDate, con.getEndDate());
         cv.put(EVDBHelper.ColHour, con.getHour());
         cv.put(EVDBHelper.ColPrg, con.getProgress());
-        cv.put(EVDBHelper.ColMem, con.getMemberCidtoJSON());
+        cv.put(EVDBHelper.ColMem, con.getMemberbyJSON());
 
         long i = db.insert(EVDBHelper.TBName, null, cv);
         return i;
@@ -49,7 +49,7 @@ public class EVDBHandler {
         cv.put(EVDBHelper.ColEdDate, con.getEndDate());
         cv.put(EVDBHelper.ColHour, con.getHour());
         cv.put(EVDBHelper.ColPrg, con.getProgress());
-        cv.put(EVDBHelper.ColMem, con.getMemberCidtoJSON());
+        cv.put(EVDBHelper.ColMem, con.getMemberbyJSON());
 
         db.update(EVDBHelper.TBName, cv, EVDBHelper.ColEid + " = " + "'"+ con.getEventId()+"'",null);
     }
@@ -58,7 +58,7 @@ public class EVDBHandler {
         db.delete(EVDBHelper.TBName , EVDBHelper.ColEid + " = " + i , null);
     }
 
-    public EventItem getData(String cid){
+    public EventItem getData(int cid){
         EventItem c = new EventItem();
         Cursor curs = db.query(EVDBHelper.TBName,null, EVDBHelper.ColEid + " = " + "'"+cid+"'",null,null,null,null,null);
         curs.moveToFirst();
@@ -68,7 +68,7 @@ public class EVDBHandler {
         c.setEndDate(curs.getString(3));
         c.setHour(curs.getString(4));
         c.setProgress(curs.getString(5));
-        c.setMemberCidbyJSON(curs.getString(6));
+        c.setMemberbyJSON(curs.getString(6));
         curs.close();
         return c;
     }
@@ -98,7 +98,7 @@ public class EVDBHandler {
         c.setEndDate(curs.getString(3));
         c.setHour(curs.getString(4));
         c.setProgress(curs.getString(5));
-        c.setMemberCidbyJSON(curs.getString(6));
+        c.setMemberbyJSON(curs.getString(6));
 
         return c;
     }
