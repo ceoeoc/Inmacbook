@@ -49,7 +49,7 @@ import com.example.admin.practice.DB.WebDBManager;
 import com.example.admin.practice.PermissionUtil;
 import com.example.admin.practice.fragments.ContactsFragment;
 import com.example.admin.practice.R;
-import com.example.admin.practice.fragments.QuestFragment;
+import com.example.admin.practice.fragments.EventFragment;
 import com.example.admin.practice.fragments.StaticsFragment;
 import com.example.admin.practice.fragments.RankingFragment;
 import com.wafflecopter.multicontactpicker.ContactResult;
@@ -58,7 +58,6 @@ import com.wafflecopter.multicontactpicker.MultiContactPicker;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
@@ -95,17 +94,20 @@ public class MainActivity extends AppCompatActivity {
         }
         editor.apply();
     }
+
     public static void setIntPref(Context context, String key, int val){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(key, val);
         editor.apply();
     }
+
     private int getIntPref(Context context, String key){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         int val = pref.getInt(key,0);
         return val;
     }
+
     private ArrayList<String> getStringArrayPref(Context context, String key){
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
             String json = pref.getString(key,null);
@@ -242,18 +244,37 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         //추가된 아이들 핸드폰 번호 리스트
-        List<String> phonelist = Cdh.getPhoneListNoBluth();
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         Handler handler;
+        Log.d("mmmmmmmmmmmmmmmmmmm", getBluetoothMacAddress()+"my address ");
+        final String bltaddr=getBluetoothMacAddress();
+        WebDBManager webDBManager;
+        webDBManager = new WebDBManager();
+        final ContactsItem ci = new ContactsItem();
+        List<ContactsItem> phonelist = Cdh.getPhoneListNoBluth();
+        Log.d("123123123", Cdh.getPhoneListNoBluth()+"onCreate: ");
+        for(int i=0;i<phonelist.size();i++){
+            phonelist.get(i).setBluth(webDBManager.finformation(phonelist.get(i).getPhone()));
 
+            Log.d("lllllllllllllllllllll", webDBManager.finformation(phonelist.get(i).getPhone())+"onCreate: ");
+            Cdh.update(phonelist.get(i));
+        }
         handler = new Handler(Looper.getMainLooper()) {
 
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 settingGPS();
+                getBluetooth();
+                Log.d("ddafdsfasdfasdf", "handleMessage: ");
+
+
+                //dlist는 검색한 블루투스 목록
+
+                Cdh.getBluth(dlist);
+
                 double LAT = 0;
                 double LNG = 0;
                 try {
@@ -278,32 +299,20 @@ public class MainActivity extends AppCompatActivity {
                 } catch (SecurityException e) {
                     e.printStackTrace();
                 }
-                Log.d("aaa", PhoneNum + "onCreate: ");
+
                 String str_web_id = PhoneNum;
                 String str_latitude = String.valueOf(LAT);
                 String str_longitude = String.valueOf(LNG);
-                Log.d("aaa", LAT + "  " + LNG + "onCreate: ");
-                webDb_manager.information(str_web_id, str_datetime, str_latitude, str_longitude);
 
-                this.sendEmptyMessageDelayed(0, 30000);
-
+                webDb_manager.information(str_web_id, str_datetime, str_latitude, str_longitude,bltaddr);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+                this.sendEmptyMessageDelayed(0, 10000);
+                if(!dlist.isEmpty()) Log.e("abbcc", dlist.get(0).toString() );
+                dlist.clear();
             }
         };
         handler.sendEmptyMessage(0);
-        
-            //블루투스 연결위한
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(!mBluetoothAdapter.isEnabled()){
-            Intent enableBtintent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtintent,REQUEST_ENABLE_BT);
-        }
-        ArrayList<String> bluetoothList = new ArrayList<>();
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mBluetoothAdapter.startDiscovery();
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
@@ -388,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
                     ContactsFragment tab1 = new ContactsFragment();
                     return tab1;
                 case 1:
-                    QuestFragment tab2 = new QuestFragment();
+                    EventFragment tab2 = new EventFragment();
                     return tab2;
                 case 2:
                     StaticsFragment tab3 = new StaticsFragment();
@@ -472,21 +481,40 @@ public class MainActivity extends AppCompatActivity {
     BluetoothAdapter mBluetoothAdapter;
     private static final int PERMISSIONS =1;
 
+    ArrayList dlist= new ArrayList();
     private final BroadcastReceiver mReceiver =new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if(BluetoothDevice.ACTION_FOUND.equals(action)) {
-                Log.d("asdasdasdas", "되냐왜나되냐뇌냐왜 되냐되라");
-
                 BluetoothDevice device= intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                Log.d("okokokokokokokokokokok","="+ device.getAddress());
+
+                dlist.add(device.getAddress());
+                Log.d("aaaaaaaaaaaaaa", dlist.get(dlist.size()-1)+"onReceive+: ");
 
             }
         }
     };
+    private void getBluetooth(){
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(!mBluetoothAdapter.isEnabled()){
+            Intent enableBtintent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtintent,REQUEST_ENABLE_BT);
+        }
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mBluetoothAdapter.startDiscovery();
+        Log.d("aaaddddd", "getBluetooth: ");
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(mReceiver, intentFilter);
 
+    }
     protected void onStart(){
         super.onStart();
+    }
+    protected void onStop(){
+        super.onStop();
+        Log.d("멈춤멈춤멈춤", "onStop: ");
+        unregisterReceiver(mReceiver);
     }
     }
