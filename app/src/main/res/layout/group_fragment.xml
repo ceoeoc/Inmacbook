@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:textColor="@color/colorAccent"
+        android:textColor="#FFFFF0"
         android:textSize="@dimen/text_size"
         android:text="새 그룹 추가하기" />
 

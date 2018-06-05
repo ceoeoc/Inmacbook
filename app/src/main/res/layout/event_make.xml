@@ -3,15 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:gravity="center">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
     <EditText
         android:id="@+id/eventname"
         android:layout_width="226dp"
         android:layout_height="56dp"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="50dp"
         android:hint="이벤트명"
         android:inputType="textCapWords"
         android:textAlignment="center" />
@@ -24,7 +28,8 @@
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/buttonColor1"
         android:text="이벤트 시작 날짜"
-        android:textColor="@color/FontColor1" />
+        android:textColor="@color/FontColor1"
+        android:textSize="@dimen/button_text_size"/>
 
     <Button
         android:id="@+id/endDateButton"
@@ -34,7 +39,8 @@
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/buttonColor1"
         android:text="이벤트 종료 날짜"
-        android:textColor="@color/FontColor1" />
+        android:textColor="@color/FontColor1"
+        android:textSize="@dimen/button_text_size" />
 
     <Button
         android:id="@+id/timeMeasure"
@@ -44,7 +50,8 @@
         android:layout_marginBottom="25dp"
         android:backgroundTint="@color/buttonColor1"
         android:textColor="@color/FontColor1"
-        android:text="시간 선택" />
+        android:text="시간 선택"
+        android:textSize="@dimen/button_text_size" />
 
 
     <LinearLayout
@@ -62,7 +69,8 @@
             android:baselineAligned="false"
             android:backgroundTint="@color/buttonColor1"
             android:textColor="@color/FontColor1"
-            android:text="다음" />
+            android:text="다음"
+            android:textSize="@dimen/button_text_size"/>
 
         <Button
             android:id="@+id/cancel"
@@ -73,8 +81,10 @@
             android:baselineAligned="false"
             android:backgroundTint="@color/buttonColor1"
             android:textColor="@color/FontColor1"
-            android:text="취소" />
+            android:text="취소"
+            android:textSize="@dimen/button_text_size"/>
 
+    </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
