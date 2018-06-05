@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.SQLException;
+import android.util.Log;
 
 import com.example.admin.practice.EventItem;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class EVDBHandler {
         cv.put(EVDBHelper.ColEdDate, con.getEndDate());
         cv.put(EVDBHelper.ColHour, con.getHour());
         cv.put(EVDBHelper.ColPrg, con.getProgress());
-        cv.put(EVDBHelper.ColMem, con.getMemberCidtoJSON());
+        cv.put(EVDBHelper.ColMem, con.getMemberbyJSON());
 
         long i = db.insert(EVDBHelper.TBName, null, cv);
         return i;
@@ -49,7 +51,7 @@ public class EVDBHandler {
         cv.put(EVDBHelper.ColEdDate, con.getEndDate());
         cv.put(EVDBHelper.ColHour, con.getHour());
         cv.put(EVDBHelper.ColPrg, con.getProgress());
-        cv.put(EVDBHelper.ColMem, con.getMemberCidtoJSON());
+        cv.put(EVDBHelper.ColMem, con.getMemberbyJSON());
 
         db.update(EVDBHelper.TBName, cv, EVDBHelper.ColEid + " = " + "'"+ con.getEventId()+"'",null);
     }
@@ -58,7 +60,7 @@ public class EVDBHandler {
         db.delete(EVDBHelper.TBName , EVDBHelper.ColEid + " = " + i , null);
     }
 
-    public EventItem getData(String cid){
+    public EventItem getData(int cid){
         EventItem c = new EventItem();
         Cursor curs = db.query(EVDBHelper.TBName,null, EVDBHelper.ColEid + " = " + "'"+cid+"'",null,null,null,null,null);
         curs.moveToFirst();
@@ -68,7 +70,7 @@ public class EVDBHandler {
         c.setEndDate(curs.getString(3));
         c.setHour(curs.getString(4));
         c.setProgress(curs.getString(5));
-        c.setMemberCidbyJSON(curs.getString(6));
+        c.setMemberbyJSON(curs.getString(6));
         curs.close();
         return c;
     }
@@ -89,6 +91,26 @@ public class EVDBHandler {
         return con;
     }
 
+    public void getBluth(ArrayList<String> lists,String now){
+        EventItem c;
+        Cursor curs = db.query(EVDBHelper.TBName, null
+                , EVDBHelper.ColStDate + " >= " + "'"+now + "' and " + EVDBHelper.ColEdDate + " <= " + "'" + now+ "'" , null, null, null, null, null);
+        curs.moveToFirst();
+        while(!curs.isAfterLast()){
+            c = cursorToEvent(curs);
+            curs.moveToNext();
+            Log.d("between event", "STD: " + c.getStDate() + "EDD: " + c.getEndDate());
+            for(int i = 0 ; i < lists.size(); i++){
+                for(EventItem.MperP s : c.getMembers()){
+                    if(s.getMemberCid().equals(lists.get(i))){
+                        s.setMemP(s.getMemP() + 3);
+                    }
+                }
+
+            }
+        }
+
+    }
     public EventItem cursorToEvent(Cursor curs){
         EventItem c = new EventItem();
 
@@ -98,7 +120,7 @@ public class EVDBHandler {
         c.setEndDate(curs.getString(3));
         c.setHour(curs.getString(4));
         c.setProgress(curs.getString(5));
-        c.setMemberCidbyJSON(curs.getString(6));
+        c.setMemberbyJSON(curs.getString(6));
 
         return c;
     }

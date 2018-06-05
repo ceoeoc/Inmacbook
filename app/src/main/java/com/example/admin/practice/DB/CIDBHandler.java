@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.SQLException;
+import android.util.Log;
 
 import com.example.admin.practice.ContactsItem;
 
@@ -83,7 +84,11 @@ public class CIDBHandler {
     public void delete(String i) {
         db.delete(CIDBHelper.TBName , CIDBHelper.ColId + " = " + i , null);
     }
-
+    public String getNameByID(String cid){
+        Cursor curs = db.query(CIDBHelper.TBName,null, CIDBHelper.ColId + " = " + "'"+cid+"'",null,null,null,null,null);
+        curs.moveToFirst();
+        return curs.getString(1);
+    }
     public ContactsItem getData(String cid){
         ContactsItem c = new ContactsItem();
         Cursor curs = db.query(CIDBHelper.TBName,null, CIDBHelper.ColId + " = " + "'"+cid+"'",null,null,null,null,null);
@@ -100,8 +105,8 @@ public class CIDBHandler {
         return c;
     }
 
-    public List<String> getPhoneListNoBluth(){
-        List<String> ret = new ArrayList<>();
+    public ArrayList<ContactsItem> getPhoneListNoBluth(){
+        ArrayList<ContactsItem> ret = new ArrayList<>();
         ContactsItem c;
 
         Cursor curs = db.query(CIDBHelper.TBName, null
@@ -109,10 +114,30 @@ public class CIDBHandler {
         curs.moveToFirst();
         while(!curs.isAfterLast()){
             c = cursorToContact(curs);
-            ret.add(c.getPhone());
+            ret.add(c);
             curs.moveToNext();
         }
         curs.close();
+        return ret;
+    }
+
+    public ArrayList<String> getBluth(ArrayList<String> arr){
+        ArrayList<String> ret = new ArrayList<>();
+        ContactsItem c;
+        Log.w("bluthlist"," " + arr.size());
+        for(int i=0;i<arr.size();i++) {
+            Log.w("plus", "getBluth: "+arr.get(i));
+
+            Cursor curs = db.query(CIDBHelper.TBName, null, CIDBHelper.ColBluth + " = " + "'" + arr.get(i)+"'", null, null, null, null, null);
+            if(curs.getCount()== 0) continue;
+            curs.moveToFirst();
+            c = cursorToContact(curs);
+            c.setPoint(c.getPoint()+3);
+            Log.w("plus", "getBluth: "+c.getName() + " " + c.getPoint());
+            this.update(c);
+            ret.add(c.get_id());
+            curs.close();
+        }
         return ret;
     }
 

@@ -28,6 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupAdapter extends BaseAdapter {
+
+    public static class GAViewHolder{
+        TextView tv_gn;
+        TextView tv_sz;
+    }
+
     private static final int ITEM_TITLE = 0;
     private static final int ITEM_GROUP = 1;
     private static final int ITEM_TYPE_MAX = 2;
@@ -65,24 +71,35 @@ public class GroupAdapter extends BaseAdapter {
         final Context context = parent.getContext();
         int viewType = getItemViewType(position);
         ListViewItem listViewItem = listViewItems.get(position);
+        final GAViewHolder holder;
+
         switch (viewType) {
             case ITEM_TITLE:
                 if (convertView == null) {
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     convertView = inflater.inflate(R.layout.subtitle, parent, false);
-                    TextView tv_title = (TextView) convertView.findViewById(R.id.subtitle);
-                    tv_title.setText(listViewItem.getTitleStr());
+
+                    holder = new GAViewHolder();
+                    holder.tv_gn = (TextView) convertView.findViewById(R.id.subtitle);
+
+                }else{
+                    holder = (GAViewHolder) convertView.getTag();
                 }
+                holder.tv_gn.setText(listViewItem.getTitleStr());
                 break;
             case ITEM_GROUP:
                 if (convertView == null) {
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     convertView = inflater.inflate(R.layout.group_list, parent, false);
-                    TextView tv_gn = (TextView) convertView.findViewById(R.id.groupname);
-                    TextView tv_sz = (TextView) convertView.findViewById(R.id.groupnumber);
-                    tv_gn.setText(listViewItem.getTitleStr());
-                    tv_sz.setText("" + listViewItem.getSz());
+
+                    holder = new GAViewHolder();
+                    holder.tv_gn = (TextView) convertView.findViewById(R.id.groupname);
+                    holder.tv_sz = (TextView) convertView.findViewById(R.id.groupnumber);
+                }else{
+                    holder = (GAViewHolder) convertView.getTag();
                 }
+                holder.tv_gn.setText(listViewItem.getTitleStr());
+                holder.tv_sz.setText("" + listViewItem.getSz());
                 break;
         }
         return convertView;

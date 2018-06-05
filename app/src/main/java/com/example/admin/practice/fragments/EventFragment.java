@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -23,7 +24,7 @@ import com.github.clans.fab.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestFragment extends Fragment{
+public class EventFragment extends Fragment{
     private EventAdapter mAdapter;
     private ListView mListView;
     private List<EventItem> lists;
@@ -53,6 +54,14 @@ public class QuestFragment extends Fragment{
 
         mAdapter.addItem(lists);
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                EventInfoDialogFragment Edialog = EventInfoDialogFragment.newInstance(lists.get(position).getEventId());
+                Edialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
+                Edialog.show(getFragmentManager(), "ContactsInfoDialogFragment");
+            }
+        });
 
         return rootView;
     }

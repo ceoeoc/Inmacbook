@@ -31,7 +31,8 @@ import java.util.List;
 public class ContactsAdapter extends BaseAdapter {
     private static final int ITEM_TITLE = 0;
     private static final int ITEM_CONTACT = 1;
-    private static final int ITEM_TYPE_MAX = 2;
+    private static final int ITEM_IN_EVENT = 2;
+    private static final int ITEM_TYPE_MAX = 3;
 
     private ArrayList<ListViewItem> listViewItems = new ArrayList<>();
 
@@ -83,13 +84,28 @@ public class ContactsAdapter extends BaseAdapter {
                     convertView = inflater.inflate(R.layout.contacts_list, parent, false);
                     TextView m_TextView = (TextView) convertView.findViewById(R.id.tv_name);
                     ProgressBar m_Pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
-                    m_TextView.setText("lv " + listViewItem.getCi().getLevel() + " " + listViewItem.getCi().getName());
+                    m_TextView.setText(listViewItem.getCi().getName());
                     m_Pgb.setProgress(listViewItem.getCi().getPoint());
                 }else{
                     TextView m_TextView = (TextView) convertView.findViewById(R.id.tv_name);
                     ProgressBar m_Pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
-                    m_TextView.setText("lv " + listViewItem.getCi().getLevel() + " " + listViewItem.getCi().getName());
+                    m_TextView.setText(listViewItem.getCi().getName());
                     m_Pgb.setProgress(listViewItem.getCi().getPoint());
+                }
+            break;
+            case ITEM_IN_EVENT:
+                if (convertView == null) {
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = inflater.inflate(R.layout.contacts_list, parent, false);
+                    TextView m_TextView = (TextView) convertView.findViewById(R.id.tv_name);
+                    ProgressBar m_Pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
+                    m_TextView.setText(listViewItem.getTitleStr());
+                    m_Pgb.setProgress(listViewItem.getSz());
+                }else{
+                    TextView m_TextView = (TextView) convertView.findViewById(R.id.tv_name);
+                    ProgressBar m_Pgb = (ProgressBar) convertView.findViewById(R.id.pgb);
+                    m_TextView.setText(listViewItem.getTitleStr());
+                    m_Pgb.setProgress(listViewItem.getSz());
                 }
             break;
         }
@@ -116,6 +132,11 @@ public class ContactsAdapter extends BaseAdapter {
             case ITEM_CONTACT:
                 item.setType(ITEM_CONTACT);
                 item.setCi(ci);
+                break;
+            case ITEM_IN_EVENT:
+                item.setType(ITEM_IN_EVENT);
+                item.setStr(str);
+                item.setSz(sz);
                 break;
         }
 

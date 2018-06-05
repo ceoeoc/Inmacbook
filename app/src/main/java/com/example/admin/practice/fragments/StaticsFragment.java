@@ -143,7 +143,17 @@ public class StaticsFragment extends Fragment {
                 webView.loadUrl("file:///android_asset/groupchart4.html");
                 break;
             case 4:
-
+                groups = logsManager.getLogs(groups,LogsManager.INCOMING_CALLS,date,0);
+                Extragroups = logsManager.getLogs(Extragroups,LogsManager.OUTGOING_CALLS,date,0);
+                dataSets.clear();
+                for(int i = 0 ; i < MainActivity.groups.size(); i++){
+                    DataSet ds = new DataSet();
+                    ds.rowname = MainActivity.groups.get(i);
+                    ds.rowval = groups.get(MainActivity.groups.get(i));
+                    ds.extra = Extragroups.get(MainActivity.groups.get(i));
+                    dataSets.add(ds);
+                }
+                webView.loadUrl("file:///android_asset/groupchart5.html");
 
                 break;
         }

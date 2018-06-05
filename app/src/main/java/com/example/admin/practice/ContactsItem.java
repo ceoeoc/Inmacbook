@@ -27,10 +27,6 @@ public class ContactsItem implements Parcelable {
     public void setPhone(String phone){this.phone = phone;}
     public void setPoint(int point){
         this.point = point;
-        while(point >= 100){
-            point -= 100;
-            level++;
-        }
     }
     public void setLevel(int level){
         this.level = level;

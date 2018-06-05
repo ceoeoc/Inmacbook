@@ -10,24 +10,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventItem {
+    public class MperP{
+        String MemberCid;
+        int MemP;
+
+        public String getMemberCid() {
+            return MemberCid;
+        }
+
+        public int getMemP() {
+            return MemP;
+        }
+
+        public void setMemP(int memP) {
+            MemP = memP;
+        }
+
+        public void setMemberCid(String memberCid) {
+            MemberCid = memberCid;
+        }
+    }
     private int EventId;
     private String EventName;
     private String StDate;
     private String EndDate;
     private String Hour;
     private String Progress;
-    private List<String> MemberCid;
+    private List<MperP> Members;
     private int size;
 
     public EventItem(){
-        MemberCid = new ArrayList<>();
+        Members = new ArrayList<>();
     }
     public int getEventId() {
         return EventId;
     }
 
     public int getSize() {
-        return MemberCid.size();
+        return Members.size();
     }
 
     public String getEventName() {
@@ -46,8 +66,8 @@ public class EventItem {
         return StDate;
     }
 
-    public List<String> getMemberCid() {
-        return MemberCid;
+    public List<MperP> getMembers() {
+        return Members;
     }
 
     public String getProgress() {
@@ -70,8 +90,18 @@ public class EventItem {
         this.Hour = hour;
     }
 
-    public void setMemberCid(List<String> memberCid) {
-        MemberCid = memberCid;
+    public void setMembersbyMembers(List<MperP> members) {
+        for(int i = 0 ; i < members.size(); i++) {
+            Members.add(members.get(i));
+        }
+    }
+    public void setMembers(List<String> members){
+        for(int i = 0 ; i < members.size(); i++) {
+            MperP mp = new MperP();
+            mp.MemberCid = members.get(i);
+            mp.MemP = 0;
+            Members.add(mp);
+        }
     }
 
     public void setStDate(String stDate) {
@@ -82,14 +112,15 @@ public class EventItem {
         Progress = progress;
     }
 
-    public String getMemberCidtoJSON(){
+    public String getMemberbyJSON(){
         String ret = new String("");
         try {
 
             JSONArray ja = new JSONArray();
-            for (int i = 0; i < MemberCid.size(); i++) {
+            for (int i = 0; i < Members.size(); i++) {
                 JSONObject jo = new JSONObject();
-                jo.put("cid", MemberCid.get(i));
+                jo.put("cid", Members.get(i).MemberCid);
+                jo.put("prg",Members.get(i).MemP);
                 ja.put(jo);
             }
             ret = ja.toString();
@@ -99,13 +130,16 @@ public class EventItem {
         return ret;
     }
 
-    public void setMemberCidbyJSON(String json){
+    public void setMemberbyJSON(String json){
         try {
             JSONArray ja = new JSONArray(json);
-            MemberCid.clear();
+            Members.clear();
             for (int i = 0; i < ja.length(); i++) {
+                MperP mp = new MperP();
                 JSONObject jo = ja.getJSONObject(i);
-                MemberCid.add(jo.getString("cid"));
+                mp.MemberCid = jo.getString("cid");
+                mp.MemP = jo.getInt("prg");
+                Members.add(mp);
             }
         }catch (Exception e){
             e.printStackTrace();
