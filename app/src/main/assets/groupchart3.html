@@ -16,7 +16,7 @@
       function drawChart() {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Group');
-        data.addColumn('number', 'Person');
+        data.addColumn('number', '총 통화 건수');
         Android.setCount();
         var n = Android.getSize();
         var arr = new Array();
@@ -26,7 +26,7 @@
         }
         // Set chart options
         data.addRows(arr);
-        var options = {'title':'Group 비율',
+        var options = {'title':'Group 별 통화 시간',
                        'width':400,
                        'height':300};
 
@@ -40,5 +40,6 @@
   <body>
     <!--Div that will hold the pie chart-->
     <div id="chart_div"></div>
+    <div id="a"></div>
   </body>
 </html>

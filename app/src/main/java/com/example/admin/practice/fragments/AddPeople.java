@@ -26,6 +26,14 @@ public class AddPeople extends DialogFragment {
     private static final String ARG_PARA1 = "para1";
     private static final String ARG_PARA2 = "para2";
 
+    public interface OnMyDialogResult{
+
+        void finish(ArrayList<String> list);
+
+    }
+
+    OnMyDialogResult myDialogResult;
+
     private AddPeopleAdapter mAdapter;
     private ListView mListView;
     private ImageButton cB;
@@ -134,10 +142,45 @@ public class AddPeople extends DialogFragment {
                     }
                 });
             break;
+            case "addlist":
+                final ArrayList<String> result = new ArrayList<>();
+                lists = Cdh.getData(0);
+                mAdapter = new AddPeopleAdapter();
+                for (int i = 0; i < lists.size(); i++) {
+                    mAdapter.addItem(lists.get(i));
+                }
+                mListView.setAdapter(mAdapter);
+                mListView.clearChoices();
+                Button addLbtn = (Button) rootView.findViewById(R.id.addpeoplebtn);
+                addLbtn.setText("선택된 사람 추가");
+                addLbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SparseBooleanArray checkedItems = mListView.getCheckedItemPositions();
+                        int count = mAdapter.getCount();
+                        Log.e(TAG, "onClick: " + count+ " " + args2 );
+                        for (int i = count - 1; i >= 0; i--) {
+                            if (checkedItems.get(i)) {
+                                Log.e(TAG, "checked : " + lists.get(i).getName() + args2 );
+                                result.add(lists.get(i).get_id());
+                            }else{
+                                Log.e(TAG, "unchecked : " + lists.get(i).getName() + args2 );
+                            }
+                        }
+                        mListView.clearChoices();
+                        myDialogResult.finish(result);
+                        getDialog().dismiss();
+                    }
+                });
+            break;
         }
 
 
         return rootView;
+    }
+
+    public void setDialogResult(OnMyDialogResult dialogResult){
+        myDialogResult = dialogResult;
     }
 
 }

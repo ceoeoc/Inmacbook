@@ -67,8 +67,4 @@
         <item name="android:colorAccent">@color/colorPrimary</item>
         <!-- customize colorAccent for the enabled color -->
     </style>
-
-    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
-        <item name="android:textColorPrimary">@android:color/black</item>
-    </style>
 </resources>
