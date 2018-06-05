@@ -19,15 +19,25 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_marginLeft="50dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
             android:fontFamily="@font/notosanscjdemilight"
+            android:gravity="center_vertical"
             android:textAllCaps="false"
             android:textColor="#000000"
             android:textSize="@dimen/text_size" />
 
+        <TextView
+            android:id="@+id/level"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:paddingRight="5dp"
+            android:text="0%"
+            android:textSize="@dimen/text_size" />
     </FrameLayout>
 
 </LinearLayout>
